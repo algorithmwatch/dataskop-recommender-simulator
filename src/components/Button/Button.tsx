@@ -6,8 +6,8 @@ import { MouseEvent, ReactNode } from 'react';
 
 export interface ButtonProps {
   type?: 'button' | 'submit';
-  size?: 'small' | 'medium' | 'large';
-  theme?: 'outline' | 'link' | 'blue';
+  size?: 'small' | 'normal' | 'large';
+  theme?: 'outline' | 'link';
   startIcon?: IconDefinition;
   endIcon?: IconDefinition;
   classNames?: string;
@@ -19,7 +19,7 @@ export interface ButtonProps {
 
 export default function Button({
   type = 'button',
-  size = 'medium',
+  size = 'normal',
   theme = 'outline',
   startIcon,
   endIcon,
@@ -58,33 +58,23 @@ export default function Button({
 
   const buttonSize = {
     small: 'px-3 py-2.5 text-sm',
-    medium: 'px-5 py-4 text-base',
+    normal: 'px-5 py-4 text-base',
     large: 'px-6 py-5 text-xl',
   };
 
   const buttonTheme = {
-    outline: cn({
-      'border-2 focus:outline-none text-yellow-1500': true,
-      'act border-yellow-700 hover:text-yellow-1200 focus:ring-4 focus:ring-yellow-500 focus:ring-opacity-50':
-        !disabled,
-      'border-yellow-1200 text-yellow-1200 opacity-50 border-opacity-50':
-        disabled,
-    }),
-    link: cn('text-yellow-1500 focus:outline-none', {
-      'hover:underline': !disabled,
-      'opacity-20': disabled,
-    }),
-    blue: cn('border-2 focus:outline-none text-white', {
-      'border-blue-500 bg-blue-500 hover:bg-blue-600 focus:ring-4 focus:ring-blue-300 focus:ring-opacity-50':
-        !disabled,
-    }),
+    outline:
+      'border-2 border-gray-900 shadow-hard active:shadow-none hover:underline focus:underline focus:outline-none disabled:opacity-50 disabled:pointer-events-none',
+    link: 'focus:outline-none hover:underline disabled:opacity-20',
   };
 
   const button = (
     <button
       // eslint-disable-next-line react/button-has-type
       type={type}
-      className={`inline-flex flex-nowrap items-center leading-none font-semibold transition duration-150 ease-in-out ${buttonSize[size]} ${buttonTheme[theme]} ${classNames}`}
+      className={cn(
+        `inline-flex flex-nowrap items-center leading-none font-semibold transition duration-150 ease-in-out ${buttonSize[size]} ${buttonTheme[theme]} ${classNames}`
+      )}
       disabled={disabled}
       onClick={onClick}
     >

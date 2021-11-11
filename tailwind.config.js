@@ -7,11 +7,17 @@ module.exports = {
     colors: {
       gray: colors.trueGray,
     },
-    extend: {},
+    extend: {
+      boxShadow: {
+        hard: '2px 2px 0 0 rgba(0, 0, 0, 0.69)',
+      },
+    },
   },
   variants: {
     extend: {
       opacity: ['disabled'],
+      boxShadow: ['active'],
+      pointerEvents: ['disabled'],
     },
   },
   plugins: [],
