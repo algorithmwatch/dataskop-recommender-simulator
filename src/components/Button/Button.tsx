@@ -17,7 +17,7 @@ export interface ButtonProps {
   children?: ReactNode;
 }
 
-export default function Button({
+export function Button({
   type = 'button',
   size = 'normal',
   theme = 'outline',
