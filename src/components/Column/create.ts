@@ -6,6 +6,7 @@ import {
   faNewspaper,
 } from '@fortawesome/pro-solid-svg-icons';
 import { sample, random, times } from 'lodash';
+import firstNames from 'src/components/Column/first_names.json';
 
 // export interface ColumnItem {
 //   id: number;
@@ -74,7 +75,7 @@ const createItem = () => {
 // creates a random column
 export const createColumn = () => {
   return {
-    name: 'Steffi',
+    name: sample(firstNames) as string,
     items: times(20, createItem),
   };
 };
