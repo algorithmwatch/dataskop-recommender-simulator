@@ -3,16 +3,16 @@ import { Button } from 'src/components/Button';
 
 export function Header({
   addColumn,
-  addColumnIsDisabled,
+  canAddColumn,
 }: {
   addColumn: () => void;
-  addColumnIsDisabled: boolean;
+  canAddColumn: boolean;
 }) {
   return (
     <header className="flex justify-between">
       <img src={logo} className="w-48" alt="logo" />
       <div className="space-x-4">
-        <Button onClick={addColumn} disabled={addColumnIsDisabled}>
+        <Button onClick={addColumn} disabled={!canAddColumn}>
           + User
         </Button>
         <Button>Plattform steuern</Button>
