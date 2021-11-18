@@ -36,34 +36,34 @@ const sourceTypes = {
 const categories = [
   {
     label: 'Film & Animation',
-    color: '#253169',
+    bgColor: 'bg-blue-800',
     icon: faCameraMovie,
   },
   {
     label: 'Gaming',
-    color: '#D4161A',
+    bgColor: 'bg-red-800',
     icon: faGamepadAlt,
   },
   {
     label: 'Musik, Tiere, Sport',
-    color: '#4F9484',
+    bgColor: 'bg-green-900',
     icon: faMusic,
   },
   {
     label: 'Menschen & Blogs',
-    color: '#F6CC00',
+    bgColor: 'bg-yellow-800',
     icon: faUserFriends,
   },
   {
     label: 'Nachrichten & Politik',
-    color: '#8C8C8C',
+    bgColor: 'bg-gray-600',
     icon: faNewspaper,
   },
 ];
 
-const createItem = () => {
+const createItem = (id: number) => {
   return {
-    id: random(100, 1000),
+    id,
     category: sample(categories),
     hasAd: random(0, 10) < 5,
     age: sample(Object.keys(ageTypes)),
@@ -74,8 +74,22 @@ const createItem = () => {
 
 // creates a random column
 export const createColumn = () => {
+  const usedIds: number[] = [];
+  const createUniqueId = () => {
+    while (true) {
+      let id = random(100, 1000);
+      if (usedIds.includes(id)) {
+        continue;
+      }
+      usedIds.push(id);
+      return id;
+    }
+  };
+
   return {
     name: sample(firstNames) as string,
-    items: times(20, createItem),
+    items: times(20, () => {
+      return createItem(createUniqueId());
+    }),
   };
 };

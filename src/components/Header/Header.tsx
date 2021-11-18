@@ -9,9 +9,9 @@ export function Header({
   canAddColumn: boolean;
 }) {
   return (
-    <header className="flex justify-between">
+    <header className="flex justify-between h-24 px-6 bg-white">
       <img src={logo} className="w-48" alt="logo" />
-      <div className="space-x-4">
+      <div className="space-x-4 flex items-center">
         <Button onClick={addColumn} disabled={!canAddColumn}>
           + User
         </Button>
