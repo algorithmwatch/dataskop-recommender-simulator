@@ -50,7 +50,7 @@ interface ColumnProps extends ReturnType<typeof createColumn> {
 
 export function Column({ name, items, onRemove, onTogglePanel }: ColumnProps) {
   return (
-    <div className="w-full max-w-sm mx-2">
+    <div className="w-full max-w-sm mx-2 -mt-20">
       {/* head */}
       <div className="relative h-20 flex items-center justify-center">
         <h2 className="text-3xl font-bold">{name}</h2>

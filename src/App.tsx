@@ -29,7 +29,7 @@ function App() {
   return (
     <div>
       <Header addColumn={addColumn} canAddColumn={canAddColumn}></Header>
-      <div className="flex justify-evenly m-6">
+      <div className="stripes flex justify-evenly mt-28">
         {columns.map(({ name, items }, index) => (
           <Column
             key={index + name}

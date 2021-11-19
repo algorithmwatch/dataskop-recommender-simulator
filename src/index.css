@@ -9,3 +9,13 @@
     @apply bg-gray-200;
   }
 }
+
+.stripes {
+  background: repeating-linear-gradient(
+    0deg,
+    theme('colors.white'),
+    theme('colors.white') 2px,
+    transparent 2px,
+    transparent 30px
+  );
+}
