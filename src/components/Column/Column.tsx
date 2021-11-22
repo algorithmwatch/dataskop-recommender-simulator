@@ -6,10 +6,11 @@ import {
   faSlidersV,
 } from '@fortawesome/pro-regular-svg-icons';
 // import { faSlidersV } from '@fortawesome/pro-solid-svg-icons';
-import { MouseEventHandler, ReactNode } from 'react';
+import { MouseEventHandler, ReactNode, RefObject } from 'react';
 import { ColumnType } from 'src/components/Column/create';
 
 interface ColumnProps extends ColumnType {
+  ref: any;
   onRemove: MouseEventHandler;
   onTogglePanel: MouseEventHandler;
 }

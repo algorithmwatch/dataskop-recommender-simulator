@@ -1,4 +1,10 @@
-import React, { MouseEvent, useEffect, useState } from 'react';
+import React, {
+  MouseEvent,
+  useEffect,
+  useState,
+  useRef,
+  createRef,
+} from 'react';
 import { Column } from 'src/components/Column';
 import { ColumnType, createColumn } from 'src/components/Column/create';
 import { Header } from 'src/components/Header';
@@ -8,6 +14,7 @@ import { createUserPanel, UserPanelType } from 'src/components/Panel/create';
 function App() {
   const [columns, setColumns] = useState<ColumnType[]>([]);
   const [userPanels, setUserPanels] = useState<UserPanelType[]>([]);
+  const columnRefs = columns.map(() => createRef());
   const maxColumns = 3;
   const canAddColumn = columns.length < maxColumns;
 
@@ -32,6 +39,10 @@ function App() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(addColumn, []);
 
+  useEffect(() => {
+    console.warn(columnRefs);
+  }, [columnRefs]);
+
   return (
     <div>
       <Header addColumn={addColumn} canAddColumn={canAddColumn}></Header>
@@ -47,9 +58,11 @@ function App() {
       ))}
       {/* Columns */}
       <div className="stripes flex justify-evenly mt-28">
-        {columns.map(({ id, name, items }) => (
+        {columns.map(({ id, name, items }, index) => (
           <Column
             key={id}
+            // ref={(el: any) => (columnRefs.current[index] = el)}
+            ref={columnRefs[index].current}
             id={id}
             name={name}
             items={items}
