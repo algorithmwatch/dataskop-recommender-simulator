@@ -7,7 +7,12 @@ import {
 } from '@fortawesome/pro-regular-svg-icons';
 // import { faSlidersV } from '@fortawesome/pro-solid-svg-icons';
 import { MouseEventHandler, ReactNode } from 'react';
-import { createColumn } from 'src/components/Column/create';
+import { ColumnType } from 'src/components/Column/create';
+
+interface ColumnProps extends ColumnType {
+  onRemove: MouseEventHandler;
+  onTogglePanel: MouseEventHandler;
+}
 
 function Badge({
   className,
@@ -42,13 +47,13 @@ function HeaderButton({
     </button>
   );
 }
-
-interface ColumnProps extends ReturnType<typeof createColumn> {
-  onRemove: MouseEventHandler;
-  onTogglePanel: MouseEventHandler;
-}
-
-export function Column({ name, items, onRemove, onTogglePanel }: ColumnProps) {
+export function Column({
+  id,
+  name,
+  items,
+  onRemove,
+  onTogglePanel,
+}: ColumnProps) {
   return (
     <div className="w-full max-w-sm mx-2 -mt-20">
       {/* head */}
@@ -60,13 +65,13 @@ export function Column({ name, items, onRemove, onTogglePanel }: ColumnProps) {
         </div>
       </div>
       {/* items */}
-      {items.map(({ id, category, hasAd, age, source, fav }) => (
+      {items.map(({ id: itemId, category, hasAd, age, fav }) => (
         <div
-          key={id}
+          key={itemId}
           className={`${category?.bgColor} flex items-center justify-between h-7 mb-0.5 px-1.5 text-white hover:bg-opacity-80`}
         >
           <div className="flex items-center">
-            <div className="w-14">#{id}</div>
+            <div className="w-14">#{itemId}</div>
             <div className="w-9">
               {category && <FontAwesomeIcon icon={category.icon} />}
             </div>
