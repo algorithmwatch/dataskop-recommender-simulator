@@ -6,7 +6,7 @@ import {
   faSlidersV,
 } from '@fortawesome/pro-regular-svg-icons';
 // import { faSlidersV } from '@fortawesome/pro-solid-svg-icons';
-import { MouseEventHandler, ReactNode, RefObject } from 'react';
+import { ForwardedRef, forwardRef, MouseEventHandler, ReactNode } from 'react';
 import { ColumnType } from 'src/components/Column/create';
 
 interface ColumnProps extends ColumnType {
@@ -48,45 +48,44 @@ function HeaderButton({
     </button>
   );
 }
-export function Column({
-  id,
-  name,
-  items,
-  onRemove,
-  onTogglePanel,
-}: ColumnProps) {
-  return (
-    <div className="w-full max-w-sm mx-2 -mt-20">
-      {/* head */}
-      <div className="relative h-20 flex items-center justify-center">
-        <h2 className="text-3xl font-bold">{name}</h2>
-        <div className="flex items-center space-x-2 absolute right-0">
-          <HeaderButton icon={faTrashAlt} onClick={onRemove} />
-          <HeaderButton icon={faSlidersV} onClick={onTogglePanel} />
+export const Column = forwardRef(
+  (
+    { id, name, items, onRemove, onTogglePanel }: ColumnProps,
+    ref: ForwardedRef<HTMLDivElement>
+  ) => {
+    return (
+      <div className="w-full max-w-sm mx-2 -mt-20" ref={ref}>
+        {/* head */}
+        <div className="relative h-20 flex items-center justify-center">
+          <h2 className="text-3xl font-bold">{name}</h2>
+          <div className="flex items-center space-x-2 absolute right-0">
+            <HeaderButton icon={faTrashAlt} onClick={onRemove} />
+            <HeaderButton icon={faSlidersV} onClick={onTogglePanel} />
+          </div>
         </div>
-      </div>
-      {/* items */}
-      {items.map(({ id: itemId, category, hasAd, age, fav }) => (
-        <div
-          key={itemId}
-          className={`${category?.bgColor} flex items-center justify-between h-7 mb-0.5 px-1.5 text-white hover:bg-opacity-80`}
-        >
-          <div className="flex items-center">
-            <div className="w-14">#{itemId}</div>
-            <div className="w-9">
-              {category && <FontAwesomeIcon icon={category.icon} />}
+        {/* items */}
+        {items.map(({ id: itemId, category, hasAd, age, fav }) => (
+          <div
+            key={itemId}
+            className={`${category?.bgColor} flex items-center justify-between h-7 mb-0.5 px-1.5 text-white hover:bg-opacity-80`}
+          >
+            <div className="flex items-center">
+              <div className="w-14">#{itemId}</div>
+              <div className="w-9">
+                {category && <FontAwesomeIcon icon={category.icon} />}
+              </div>
+              <div className="flex items-center">
+                {age === 'today' && <Badge className="bg-blue-500">NEU</Badge>}
+                {hasAd && <Badge className="bg-red-500">AD</Badge>}
+              </div>
             </div>
             <div className="flex items-center">
-              {age === 'today' && <Badge className="bg-blue-500">NEU</Badge>}
-              {hasAd && <Badge className="bg-red-500">AD</Badge>}
+              <FontAwesomeIcon icon={faHeart} />
+              <span className="ml-0.5 text-sm">{fav}%</span>
             </div>
           </div>
-          <div className="flex items-center">
-            <FontAwesomeIcon icon={faHeart} />
-            <span className="ml-0.5 text-sm">{fav}%</span>
-          </div>
-        </div>
-      ))}
-    </div>
-  );
-}
+        ))}
+      </div>
+    );
+  }
+);

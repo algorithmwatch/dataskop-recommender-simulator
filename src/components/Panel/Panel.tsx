@@ -8,19 +8,28 @@ import { ColumnType } from 'src/components/Column/create';
 
 interface UserPanelProps extends UserPanelType {
   column?: ColumnType;
+  columnElement: HTMLDivElement;
   // onRemove: MouseEventHandler;
   // onTogglePanel: MouseEventHandler;
 }
 
-function Panel({ children }: { children: ReactNode }) {
+function Panel({
+  x,
+  y,
+  children,
+}: {
+  x: number;
+  y: number;
+  children: ReactNode;
+}) {
   return (
     <Rnd
       className="z-50 p-5 bg-white bg-opacity-95 shadow-hard border-2 border-gray-900"
       dragHandleClassName="drag-handle"
       enableResizing={false}
       default={{
-        x: 0,
-        y: 0,
+        x,
+        y,
         width: 360,
         height: 'auto',
       }}
@@ -57,9 +66,19 @@ function Slider({ label, bgColor, minValue, maxValue }: ControlElementType) {
   );
 }
 
-export function UserPanel({ id, column, controlGroups }: UserPanelProps) {
+export function UserPanel({
+  id,
+  column,
+  columnElement,
+  controlGroups,
+}: UserPanelProps) {
+  console.warn('column', columnElement);
+  const columnRect = columnElement.getBoundingClientRect();
+  const x = columnRect.x + columnRect.width / 2;
+  const y = window.innerHeight / 2;
+
   return (
-    <Panel>
+    <Panel x={x} y={y}>
       {/* User name */}
       <div className="font-bold text-xl mb-2.5">{column?.name}</div>
 
