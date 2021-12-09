@@ -5,23 +5,27 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactSlider from 'react-slider';
 import {
   Column as ColumnType,
-  ControlGroup,
+  ControlElement,
   UserPanel as UserPanelType,
 } from 'src/stores';
 
 export type OnCategoryChangeCallback = {
+  columnId: string;
   label: string;
   value: number;
-  controlElement: ControlGroup['controls'];
+  minValue: number;
+  maxValue: number;
 };
 
 interface UserPanelProps extends UserPanelType {
   column: ColumnType;
   columnElement: HTMLDivElement;
   onCategoryChange: ({
+    columnId,
     label,
     value,
-    controlElement,
+    minValue,
+    maxValue,
   }: OnCategoryChangeCallback) => void;
 }
 
@@ -67,7 +71,7 @@ function Slider({
   minValue,
   maxValue,
   onChange,
-}: ControlGroup['controls']) {
+}: ControlElement) {
   // const elementId = kebabCase(label);
   return (
     <div>
@@ -102,41 +106,30 @@ export function UserPanel({
       <div className="font-bold text-xl mb-2.5">{column?.name}</div>
 
       {/* Control groups */}
-      {controlGroups.map(({ label, controls }) => {
-        const content = [
-          <div key="head" className="font-bold mb-2">
-            {label}
-          </div>,
-        ];
 
-        const controlElements: ReactNode[] = [];
-
-        controls.forEach((controlElement: ControlGroup['controls']) => {
-          if (controlElement.type === 'slider') {
-            controlElements.push(
-              <Slider
-                key={controlElement.label}
-                onChange={(value: number) => {
-                  onCategoryChange({ label, value, controlElement });
-                }}
-                {...controlElement}
-              />
-            );
-          }
-        });
-
-        // wrap control elements
-        content.push(
-          <div
-            key="control-elements"
-            className="grid grid-cols-2 gap-x-4 gap-y-2"
-          >
-            {controlElements}
-          </div>
-        );
-
-        return content;
-      })}
+      {/* Categories */}
+      <div key="head" className="font-bold mb-2">
+        {controlGroups.categories.label}
+      </div>
+      <div key="control-elements" className="grid grid-cols-2 gap-x-4 gap-y-2">
+        {controlGroups.categories.controls.map(
+          (controlElement: ControlElement) => (
+            <Slider
+              key={controlElement.label}
+              onChange={(value: number) => {
+                onCategoryChange({
+                  columnId: column.id,
+                  label: controlElement.label,
+                  value,
+                  minValue: controlElement.minValue,
+                  maxValue: controlElement.maxValue,
+                });
+              }}
+              {...controlElement}
+            />
+          )
+        )}
+      </div>
     </Panel>
   );
 }
