@@ -14,6 +14,9 @@ function App() {
   const removeUserPanelByColumnId = useUserPanelStore(
     (state) => state.removeByColumnId
   );
+  const onCategoryChange = (value: any) => {
+    console.warn('categoryChange', value);
+  };
   const columnRefs: MutableRefObject<{ [key: string]: HTMLDivElement }> =
     useRef(
       columns.reduce((acc, cur) => ({ ...acc, [cur.id]: createRef() }), {})
@@ -58,6 +61,7 @@ function App() {
               column={column}
               columnElement={columnRefs.current[columnId]}
               controlGroups={controlGroups}
+              onCategoryChange={onCategoryChange}
             />
           )
         );

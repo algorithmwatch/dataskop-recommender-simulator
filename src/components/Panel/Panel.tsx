@@ -12,8 +12,15 @@ import {
 interface UserPanelProps extends UserPanelType {
   column: ColumnType;
   columnElement: HTMLDivElement;
-  // onRemove: MouseEventHandler;
-  // onTogglePanel: MouseEventHandler;
+  onCategoryChange: ({
+    label,
+    value,
+    controlElement,
+  }: {
+    label: string;
+    value: number;
+    controlElement: ControlGroup['controls'];
+  }) => void;
 }
 
 function Panel({
@@ -57,6 +64,7 @@ function Slider({
   bgColor,
   minValue,
   maxValue,
+  onChange,
 }: ControlGroup['controls']) {
   // const elementId = kebabCase(label);
   return (
@@ -69,6 +77,7 @@ function Slider({
         min={minValue}
         max={maxValue}
         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
+        onChange={onChange}
       />
     </div>
   );
@@ -79,6 +88,7 @@ export function UserPanel({
   column,
   columnElement,
   controlGroups,
+  onCategoryChange,
 }: UserPanelProps) {
   const columnRect = columnElement.getBoundingClientRect();
   const x = columnRect.x + columnRect.width / 2;
@@ -102,7 +112,13 @@ export function UserPanel({
         controls.forEach((controlElement: ControlGroup['controls']) => {
           if (controlElement.type === 'slider') {
             controlElements.push(
-              <Slider key={controlElement.label} {...controlElement} />
+              <Slider
+                key={controlElement.label}
+                onChange={(value: number) => {
+                  onCategoryChange({ label, value, controlElement });
+                }}
+                {...controlElement}
+              />
             );
           }
         });
