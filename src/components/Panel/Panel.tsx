@@ -1,13 +1,16 @@
 import { ReactNode } from 'react';
 import { Rnd } from 'react-rnd';
-import { ControlElementType, UserPanelType } from 'src/components/Panel/create';
 import { faGripHorizontal } from '@fortawesome/pro-light-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import ReactSlider from 'react-slider';
-import { ColumnType } from 'src/components/Column/create';
+import {
+  Column as ColumnType,
+  ControlGroup,
+  UserPanel as UserPanelType,
+} from 'src/stores';
 
 interface UserPanelProps extends UserPanelType {
-  column?: ColumnType;
+  column: ColumnType;
   columnElement: HTMLDivElement;
   // onRemove: MouseEventHandler;
   // onTogglePanel: MouseEventHandler;
@@ -49,7 +52,12 @@ function Panel({
   );
 }
 
-function Slider({ label, bgColor, minValue, maxValue }: ControlElementType) {
+function Slider({
+  label,
+  bgColor,
+  minValue,
+  maxValue,
+}: ControlGroup['controls']) {
   // const elementId = kebabCase(label);
   return (
     <div>
@@ -92,7 +100,7 @@ export function UserPanel({
 
         const controlElements: ReactNode[] = [];
 
-        controls.forEach((controlElement) => {
+        controls.forEach((controlElement: ControlGroup['controls']) => {
           if (controlElement.type === 'slider') {
             controlElements.push(
               <Slider key={controlElement.label} {...controlElement} />

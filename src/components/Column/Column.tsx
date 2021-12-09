@@ -7,7 +7,7 @@ import {
 } from '@fortawesome/pro-regular-svg-icons';
 // import { faSlidersV } from '@fortawesome/pro-solid-svg-icons';
 import { ForwardedRef, forwardRef, MouseEventHandler, ReactNode } from 'react';
-import { ColumnType } from 'src/components/Column/create';
+import { Column as ColumnType } from 'src/stores';
 
 interface ColumnProps extends ColumnType {
   ref: any;

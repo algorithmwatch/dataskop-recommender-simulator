@@ -4,6 +4,7 @@ import {
   faMusic,
   faUserFriends,
   faNewspaper,
+  IconDefinition,
 } from '@fortawesome/pro-solid-svg-icons';
 
 export const ageTypes = {
@@ -18,7 +19,13 @@ export const ageTypes = {
 //   other: 'unbestimmt',
 // };
 
-export const categories = [
+export type Category = {
+  label: string;
+  bgColor: string;
+  icon: IconDefinition;
+};
+
+export const categories: Category[] = [
   {
     label: 'Film & Animation',
     bgColor: 'bg-blue-800',
