@@ -37,15 +37,21 @@ function Badge({
 function HeaderButton({
   icon,
   onClick,
+  isActive,
 }: {
   icon: IconDefinition;
   onClick: MouseEventHandler;
+  isActive?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
-      className="bg-gray-300 text-gray-900 text-xl rounded-full w-10 h-10 hover:bg-gray-900 hover:text-white"
+      className={`${
+        isActive
+          ? 'ring-2 ring-gray-900 bg-white'
+          : 'bg-gray-300 hover:bg-gray-900 hover:text-white'
+      } text-gray-900 text-xl rounded-full w-10 h-10 transition-all `}
     >
       <FontAwesomeIcon icon={icon} />
     </button>
@@ -74,6 +80,7 @@ export const Column = forwardRef(
             <HeaderButton
               icon={faSlidersV}
               onClick={() => (hasPanel ? onHidePanel() : onShowPanel())}
+              isActive={hasPanel}
             />
           </div>
         </div>

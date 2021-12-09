@@ -1,3 +1,4 @@
+import { sample, random, times } from 'lodash';
 import {
   faCameraMovie,
   faGamepadAlt,
@@ -52,3 +53,29 @@ export const categories: Category[] = [
     icon: faNewspaper,
   },
 ];
+
+export const createColumnItems = () => {
+  const createItem = (id: number) => {
+    return {
+      id,
+      category: sample(categories) as Category,
+      hasAd: random(0, 10) < 5,
+      hasPublicSource: random(0, 10) < 5,
+      age: sample(Object.keys(ageTypes)) as string,
+      fav: random(30, 99),
+    };
+  };
+  const usedIds: number[] = [];
+  const createUniqueItemId = () => {
+    while (true) {
+      let id = random(100, 1000);
+      if (usedIds.includes(id)) {
+        continue;
+      }
+      usedIds.push(id);
+      return id;
+    }
+  };
+
+  return times(20, () => createItem(createUniqueItemId()));
+};
