@@ -80,7 +80,6 @@ export function UserPanel({
   columnElement,
   controlGroups,
 }: UserPanelProps) {
-  console.warn('column', columnElement);
   const columnRect = columnElement.getBoundingClientRect();
   const x = columnRect.x + columnRect.width / 2;
   const y = window.innerHeight / 2;

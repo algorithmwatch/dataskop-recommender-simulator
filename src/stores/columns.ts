@@ -1,4 +1,4 @@
-import { sample, random, times, uniqueId } from 'lodash';
+import { sample, random, times, uniqueId, omit } from 'lodash';
 import firstNames from 'src/components/Column/first_names.json';
 import { Category, ageTypes, categories } from 'src/stores/model';
 import create from 'zustand';
@@ -15,17 +15,18 @@ export type ColumnItem = {
 export type Column = {
   id: string;
   name: string;
-  items: ColumnItem[];
 };
 
 type ColumnsStore = {
   columns: Column[];
+  items: { [key: Column['id']]: ColumnItem[] };
   add: () => void;
   remove: (id: string) => void;
 };
 
 export const useColumnStore = create<ColumnsStore>((set) => ({
   columns: [],
+  items: {},
 
   add: () =>
     set((state) => {
@@ -58,16 +59,17 @@ export const useColumnStore = create<ColumnsStore>((set) => ({
       const newColumn = {
         id: uniqueId('column'),
         name: sample(firstNames) as string,
-        items: createColumnItems(),
       };
 
       return {
         columns: [...state.columns, newColumn],
+        items: { ...state.items, [newColumn.id]: createColumnItems() },
       };
     }),
 
   remove: (id) =>
     set((state) => ({
       columns: state.columns.filter((column) => column.id !== id),
+      items: omit(state.items, [id]),
     })),
 }));

@@ -7,12 +7,15 @@ import {
 } from '@fortawesome/pro-regular-svg-icons';
 // import { faSlidersV } from '@fortawesome/pro-solid-svg-icons';
 import { ForwardedRef, forwardRef, MouseEventHandler, ReactNode } from 'react';
-import { Column as ColumnType } from 'src/stores';
+import { Column as ColumnType, ColumnItem } from 'src/stores';
 
 interface ColumnProps extends ColumnType {
   ref: any;
+  items: ColumnItem[];
+  hasPanel: boolean;
   onRemove: MouseEventHandler;
-  onTogglePanel: MouseEventHandler;
+  onShowPanel: () => void;
+  onHidePanel: () => void;
 }
 
 function Badge({
@@ -50,7 +53,15 @@ function HeaderButton({
 }
 export const Column = forwardRef(
   (
-    { id, name, items, onRemove, onTogglePanel }: ColumnProps,
+    {
+      id,
+      name,
+      items,
+      hasPanel,
+      onRemove,
+      onShowPanel,
+      onHidePanel,
+    }: ColumnProps,
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     return (
@@ -60,7 +71,10 @@ export const Column = forwardRef(
           <h2 className="text-3xl font-bold">{name}</h2>
           <div className="flex items-center space-x-2 absolute right-0">
             <HeaderButton icon={faTrashAlt} onClick={onRemove} />
-            <HeaderButton icon={faSlidersV} onClick={onTogglePanel} />
+            <HeaderButton
+              icon={faSlidersV}
+              onClick={() => (hasPanel ? onHidePanel() : onShowPanel())}
+            />
           </div>
         </div>
         {/* items */}

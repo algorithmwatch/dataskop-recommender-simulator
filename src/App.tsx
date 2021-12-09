@@ -1,10 +1,4 @@
-import React, {
-  MouseEvent,
-  useEffect,
-  useRef,
-  MutableRefObject,
-  createRef,
-} from 'react';
+import React, { useEffect, useRef, MutableRefObject, createRef } from 'react';
 import { Column } from 'src/components/Column';
 import { Header } from 'src/components/Header';
 import { UserPanel } from 'src/components/Panel';
@@ -12,6 +6,7 @@ import { useColumnStore, useUserPanelStore } from 'src/stores';
 
 function App() {
   const columns = useColumnStore((state) => state.columns);
+  const columnItems = useColumnStore((state) => state.items);
   const addColumn = useColumnStore((state) => state.add);
   const removeColumn = useColumnStore((state) => state.remove);
   const userPanels = useUserPanelStore((state) => state.panels);
@@ -25,19 +20,6 @@ function App() {
     );
   const maxColumns = 3;
   const canAddColumn = columns.length < maxColumns;
-  const toggleUserPanel = (event: MouseEvent, columnId: string) => {
-    console.warn('toggleUserPanel', columnId);
-    const hasUserPanel = userPanels.some(
-      (panel) => panel.columnId === columnId
-    );
-
-    if (hasUserPanel) {
-      removeUserPanelByColumnId(columnId);
-    } else {
-      // add userPanel
-      addUserPanel(columnId);
-    }
-  };
 
   // add one column at start
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -48,15 +30,17 @@ function App() {
       <Header addColumn={addColumn} canAddColumn={canAddColumn}></Header>
       {/* Columns */}
       <div className="stripes flex justify-evenly mt-28">
-        {columns.map(({ id, name, items }, index) => (
+        {columns.map(({ id, name }, index) => (
           <Column
             key={id}
             ref={(el: HTMLDivElement) => (columnRefs.current[id] = el)}
             id={id}
             name={name}
-            items={items}
-            onRemove={(e) => removeColumn(id)}
-            onTogglePanel={(e) => toggleUserPanel(e, id)}
+            items={columnItems[id]}
+            onRemove={() => removeColumn(id)}
+            hasPanel={userPanels.some((panel) => panel.columnId === id)}
+            onShowPanel={() => addUserPanel(id)}
+            onHidePanel={() => removeUserPanelByColumnId(id)}
           ></Column>
         ))}
       </div>
