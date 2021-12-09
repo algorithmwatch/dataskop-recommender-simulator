@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, MutableRefObject, createRef } from 'react';
 import { Column } from 'src/components/Column';
 import { Header } from 'src/components/Header';
-import { UserPanel } from 'src/components/Panel';
+import { OnCategoryChangeCallback, UserPanel } from 'src/components/Panel';
 import { useColumnStore, useUserPanelStore } from 'src/stores';
 
 function App() {
@@ -14,7 +14,11 @@ function App() {
   const removeUserPanelByColumnId = useUserPanelStore(
     (state) => state.removeByColumnId
   );
-  const onCategoryChange = (value: any) => {
+  const onCategoryChange = ({
+    label,
+    value,
+    controlElement,
+  }: OnCategoryChangeCallback) => {
     console.warn('categoryChange', value);
   };
   const columnRefs: MutableRefObject<{ [key: string]: HTMLDivElement }> =

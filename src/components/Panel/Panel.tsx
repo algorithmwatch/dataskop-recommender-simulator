@@ -9,6 +9,12 @@ import {
   UserPanel as UserPanelType,
 } from 'src/stores';
 
+export type OnCategoryChangeCallback = {
+  label: string;
+  value: number;
+  controlElement: ControlGroup['controls'];
+};
+
 interface UserPanelProps extends UserPanelType {
   column: ColumnType;
   columnElement: HTMLDivElement;
@@ -16,11 +22,7 @@ interface UserPanelProps extends UserPanelType {
     label,
     value,
     controlElement,
-  }: {
-    label: string;
-    value: number;
-    controlElement: ControlGroup['controls'];
-  }) => void;
+  }: OnCategoryChangeCallback) => void;
 }
 
 function Panel({
