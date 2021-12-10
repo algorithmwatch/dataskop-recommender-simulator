@@ -7,6 +7,7 @@ import {
   Column as ColumnType,
   ControlElement,
   UserPanel as UserPanelType,
+  useUserPanelStore,
 } from 'src/stores';
 
 export type OnCategoryChangeCallback = {
@@ -20,13 +21,7 @@ export type OnCategoryChangeCallback = {
 interface UserPanelProps extends UserPanelType {
   column: ColumnType;
   columnElement: HTMLDivElement;
-  onCategoryChange: ({
-    columnId,
-    label,
-    value,
-    minValue,
-    maxValue,
-  }: OnCategoryChangeCallback) => void;
+  onChange: () => void;
 }
 
 function Panel({
@@ -94,11 +89,12 @@ export function UserPanel({
   column,
   columnElement,
   controlGroups,
-  onCategoryChange,
+  onChange,
 }: UserPanelProps) {
   const columnRect = columnElement.getBoundingClientRect();
   const x = columnRect.x + columnRect.width / 2;
   const y = window.innerHeight / 2;
+  const setControlValue = useUserPanelStore((state) => state.setControlValue);
 
   return (
     <Panel x={x} y={y}>
@@ -117,13 +113,13 @@ export function UserPanel({
             <Slider
               key={controlElement.label}
               onChange={(value: number) => {
-                onCategoryChange({
-                  columnId: column.id,
-                  label: controlElement.label,
-                  value,
-                  minValue: controlElement.minValue,
-                  maxValue: controlElement.maxValue,
-                });
+                setControlValue(
+                  column.id,
+                  'categories',
+                  controlElement.label,
+                  value
+                );
+                onChange();
               }}
               {...controlElement}
             />

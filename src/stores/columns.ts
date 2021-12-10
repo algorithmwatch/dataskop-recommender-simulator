@@ -6,6 +6,7 @@ import create from 'zustand';
 export type ColumnItem = {
   id: number;
   category: Category;
+  baseRank: number;
   hasAd: boolean;
   hasPublicSource: boolean;
   age: string;

@@ -1,3 +1,4 @@
+import { useTransition, animated } from 'react-spring';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faHeart,
@@ -69,6 +70,23 @@ export const Column = forwardRef(
     const removeUserPanelByColumnId = useUserPanelStore(
       (state) => state.removeByColumnId
     );
+    let height = 0;
+    const paddingHeight = 2;
+    const itemHeight = 28;
+    const transitions = useTransition(
+      items.map((item, index) => ({
+        ...item,
+        height: itemHeight,
+        y: (height += itemHeight + paddingHeight) - itemHeight,
+      })),
+      {
+        key: (item: any) => item.id,
+        from: { height: 0, opacity: 0 },
+        leave: { height: 0, opacity: 0 },
+        enter: ({ y, height }) => ({ y, height, opacity: 1 }),
+        update: ({ y, height }) => ({ y, height }),
+      }
+    );
 
     return (
       <div className="w-full max-w-sm mx-2 -mt-20" ref={ref}>
@@ -87,27 +105,43 @@ export const Column = forwardRef(
           </div>
         </div>
         {/* items */}
-        {items.map(({ id: itemId, category, hasAd, age, fav }) => (
-          <div
-            key={itemId}
-            className={`${category?.bgColor} flex items-center justify-between h-7 mb-0.5 px-1.5 text-white hover:bg-opacity-80`}
-          >
-            <div className="flex items-center">
-              <div className="w-14">#{itemId}</div>
-              <div className="w-9">
-                {category && <FontAwesomeIcon icon={category.icon} />}
-              </div>
-              <div className="flex items-center">
-                {age === 'today' && <Badge className="bg-blue-500">NEU</Badge>}
-                {hasAd && <Badge className="bg-red-500">AD</Badge>}
-              </div>
-            </div>
-            <div className="flex items-center">
-              <FontAwesomeIcon icon={faHeart} />
-              <span className="ml-0.5 text-sm">{fav}%</span>
-            </div>
-          </div>
-        ))}
+        <div
+          className="relative h-full"
+          style={{ height, top: `-${paddingHeight}px` }}
+        >
+          {transitions(
+            (style, { id: itemId, category, hasAd, age, fav }, t, index) => (
+              <animated.div
+                className={`${category?.bgColor} absolute w-full flex items-center justify-between h-7 mb-0.5 px-1.5 text-white hover:bg-opacity-80`}
+                style={{
+                  willChange: 'transform, height, opacity',
+                  zIndex: items.length - index,
+                  ...style,
+                }}
+              >
+                <div className="flex items-center relative">
+                  <div className="absolute -left-14 w-10 text-right text-sm text-white">
+                    {index + 1}
+                  </div>
+                  <div className="w-14">#{itemId}</div>
+                  <div className="w-9">
+                    {category && <FontAwesomeIcon icon={category.icon} />}
+                  </div>
+                  <div className="flex items-center">
+                    {age === 'today' && (
+                      <Badge className="bg-blue-500">NEU</Badge>
+                    )}
+                    {hasAd && <Badge className="bg-red-500">AD</Badge>}
+                  </div>
+                </div>
+                <div className="flex items-center">
+                  <FontAwesomeIcon icon={faHeart} />
+                  <span className="ml-0.5 text-sm">{fav}%</span>
+                </div>
+              </animated.div>
+            )
+          )}
+        </div>
       </div>
     );
   }
