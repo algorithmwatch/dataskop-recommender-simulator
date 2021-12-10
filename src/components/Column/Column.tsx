@@ -7,15 +7,17 @@ import {
 } from '@fortawesome/pro-regular-svg-icons';
 // import { faSlidersV } from '@fortawesome/pro-solid-svg-icons';
 import { ForwardedRef, forwardRef, MouseEventHandler, ReactNode } from 'react';
-import { Column as ColumnType, ColumnItem } from 'src/stores';
+import {
+  Column as ColumnType,
+  ColumnItem,
+  useColumnStore,
+  useUserPanelStore,
+} from 'src/stores';
 
 interface ColumnProps extends ColumnType {
   ref: any;
   items: ColumnItem[];
   hasPanel: boolean;
-  onRemove: MouseEventHandler;
-  onShowPanel: () => void;
-  onHidePanel: () => void;
 }
 
 function Badge({
@@ -59,27 +61,27 @@ function HeaderButton({
 }
 export const Column = forwardRef(
   (
-    {
-      id,
-      name,
-      items,
-      hasPanel,
-      onRemove,
-      onShowPanel,
-      onHidePanel,
-    }: ColumnProps,
+    { id, name, items, hasPanel }: ColumnProps,
     ref: ForwardedRef<HTMLDivElement>
   ) => {
+    const removeColumn = useColumnStore((state) => state.remove);
+    const addUserPanel = useUserPanelStore((state) => state.add);
+    const removeUserPanelByColumnId = useUserPanelStore(
+      (state) => state.removeByColumnId
+    );
+
     return (
       <div className="w-full max-w-sm mx-2 -mt-20" ref={ref}>
         {/* head */}
         <div className="relative h-20 flex items-center justify-center">
           <h2 className="text-3xl font-bold">{name}</h2>
           <div className="flex items-center space-x-2 absolute right-0">
-            <HeaderButton icon={faTrashAlt} onClick={onRemove} />
+            <HeaderButton icon={faTrashAlt} onClick={() => removeColumn(id)} />
             <HeaderButton
               icon={faSlidersV}
-              onClick={() => (hasPanel ? onHidePanel() : onShowPanel())}
+              onClick={() =>
+                hasPanel ? removeUserPanelByColumnId(id) : addUserPanel(id)
+              }
               isActive={hasPanel}
             />
           </div>

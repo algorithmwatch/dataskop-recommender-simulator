@@ -55,13 +55,8 @@ function App() {
   const columnItems = useColumnStore((state) => state.items);
   const setColumnItems = useColumnStore((state) => state.setItems);
   const addColumn = useColumnStore((state) => state.add);
-  const removeColumn = useColumnStore((state) => state.remove);
   const userPanels = useUserPanelStore((state) => state.panels);
-  const addUserPanel = useUserPanelStore((state) => state.add);
   const setControlValue = useUserPanelStore((state) => state.setControlValue);
-  const removeUserPanelByColumnId = useUserPanelStore(
-    (state) => state.removeByColumnId
-  );
   const columnRefs: MutableRefObject<{ [key: string]: HTMLDivElement }> =
     useRef(
       columns.reduce((acc, cur) => ({ ...acc, [cur.id]: createRef() }), {})
@@ -85,7 +80,7 @@ function App() {
         })
       )
     );
-    console.warn('allCategories', allCategories);
+    // console.warn('allCategories', allCategories);
     /*
       0: {label: 'Film & Animation', value: 0, minValue: 0, maxValue: 10}
       1: {label: 'Gaming', value: 0, minValue: 0, maxValue: 10}
@@ -100,16 +95,19 @@ function App() {
       .concat({ label, value, minValue, maxValue });
 
     const newItems = orderByDistance(oldItems, selection);
-    console.warn('oldItems', oldItems);
-    console.warn('newItems', newItems);
+    // console.warn('oldItems', oldItems);
+    // console.warn('newItems', newItems);
 
-    setColumnItems(columnId, newItems as ColumnItem[]);
     setControlValue(columnId, 'categories', label, value);
+    setColumnItems(columnId, newItems as ColumnItem[]);
   };
 
   // add one column at start
   // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(addColumn, []);
+  useEffect(() => {
+    console.warn('render');
+  });
 
   return (
     <div>
@@ -123,16 +121,13 @@ function App() {
             id={id}
             name={name}
             items={columnItems[id]}
-            onRemove={() => removeColumn(id)}
             hasPanel={userPanels.some((panel) => panel.columnId === id)}
-            onShowPanel={() => addUserPanel(id)}
-            onHidePanel={() => removeUserPanelByColumnId(id)}
           ></Column>
         ))}
       </div>
 
       {/* Floating panels */}
-      {userPanels.map(({ id, columnId, controlGroups }, index) => {
+      {userPanels.map(({ id, columnId, controlGroups }) => {
         const column = columns.find((col) => col.id === columnId);
 
         return (

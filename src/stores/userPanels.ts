@@ -61,8 +61,8 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
     }),
 
   setControlValue: (columnId, groupSlug, controlLabel, value) =>
-    set((state) => {
-      state.panels.map((panel) => {
+    set((state) => ({
+      panels: state.panels.map((panel) => {
         if (panel.columnId !== columnId) {
           return panel;
         }
@@ -76,11 +76,10 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
         }
 
         wantedControlElement.value = value;
-        console.warn('nextPanel', nextPanel);
 
         return nextPanel;
-      });
-    }),
+      }),
+    })),
 
   remove: (id) =>
     set((state) => ({
