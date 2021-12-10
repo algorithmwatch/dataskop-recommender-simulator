@@ -6,7 +6,6 @@ import {
   IconDefinition,
   faSlidersV,
 } from '@fortawesome/pro-regular-svg-icons';
-// import { faSlidersV } from '@fortawesome/pro-solid-svg-icons';
 import { ForwardedRef, forwardRef, MouseEventHandler, ReactNode } from 'react';
 import {
   Column as ColumnType,
@@ -73,6 +72,7 @@ export const Column = forwardRef(
     let height = 0;
     const paddingHeight = 2;
     const itemHeight = 28;
+    // example from: https://codesandbox.io/s/github/pmndrs/react-spring/tree/master/demo/src/sandboxes/list-reordering?file=/src/App.tsx
     const transitions = useTransition(
       items.map((item, index) => ({
         ...item,
