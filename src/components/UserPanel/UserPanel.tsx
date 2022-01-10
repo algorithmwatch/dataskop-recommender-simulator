@@ -2,9 +2,7 @@ import { ControlElement, useUserPanelStore } from "src/stores";
 import { Panel } from "src/components/Panel/Panel";
 import { Slider } from "src/components/Slider/Slider";
 import { Column as ColumnType, UserPanel as UserPanelType } from "src/stores";
-import { ageTypes } from "src/stores/model";
 import Switch from "react-switch";
-import { useState } from "react";
 import classNames from "classnames";
 
 export interface UserPanelProps extends UserPanelType {

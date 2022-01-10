@@ -12,11 +12,11 @@ import { ColumnItem } from "src/stores";
 
 const itemCount = 50;
 export const defaultAge = "month";
-export const ageTypes: { [key: string]: string } = {
-  today: "Heute",
-  week: "Diese Woche",
-  month: "Diesen Monat",
-  year: "Dieses Jahr",
+export const ageTypes: { [key: string]: { label: any; percent: number } } = {
+  today: { label: "Heute", percent: 5 },
+  week: { label: "Diese Woche", percent: 10 },
+  month: { label: "Diesen Monat", percent: 20 },
+  year: { label: "Dieses Jahr", percent: 60 },
 };
 // export const sourceTypes = {
 //   public: 'öffentlich rechtlich',
@@ -59,8 +59,7 @@ export const categories: Category[] = [
 ];
 
 export const createColumnItems = () => {
-  const createItem = (id: number) => {
-    const age = sample(Object.keys(ageTypes)) as string;
+  const createItem = (id: number, age: string) => {
     return {
       id,
       baseRank: random(1, true),
@@ -83,9 +82,18 @@ export const createColumnItems = () => {
       return id;
     }
   };
+  const percentage = (percentToGet: number, number: number) =>
+    (percentToGet / 100) * number;
+
+  const items = Object.keys(ageTypes).flatMap((key) => {
+    const { percent } = ageTypes[key];
+    const count = Math.round(percentage(percent, itemCount));
+    return times(count, () => createItem(createUniqueItemId(), key));
+  });
 
   return orderByDistance(
-    times(itemCount, () => createItem(createUniqueItemId())),
+    // times(itemCount, () => createItem(createUniqueItemId())),
+    items,
     []
   );
 };

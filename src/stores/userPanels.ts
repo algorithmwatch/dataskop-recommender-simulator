@@ -57,7 +57,7 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
             label: "Aktualität",
             controls: Object.keys(ageTypes).map((key) => ({
               key: key,
-              label: ageTypes[key],
+              label: ageTypes[key].label,
               value: key === defaultAge ? true : false,
             })),
           },
