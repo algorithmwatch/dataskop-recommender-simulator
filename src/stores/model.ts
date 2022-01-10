@@ -1,4 +1,4 @@
-import { sample, random, times, orderBy, pick, fill } from 'lodash';
+import { sample, random, times, orderBy, pick, fill } from "lodash";
 import {
   faCameraMovie,
   faGamepadAlt,
@@ -6,15 +6,17 @@ import {
   faUserFriends,
   faNewspaper,
   IconDefinition,
-} from '@fortawesome/pro-solid-svg-icons';
-import { distance } from 'mathjs';
-import { ColumnItem } from 'src/stores';
+} from "@fortawesome/pro-solid-svg-icons";
+import { distance } from "mathjs";
+import { ColumnItem } from "src/stores";
 
-export const ageTypes = {
-  today: 'Heute',
-  week: 'Diese Woche',
-  month: 'Diesen Monat',
-  year: 'Dieses Jahr',
+const itemCount = 50;
+export const defaultAge = "month";
+export const ageTypes: { [key: string]: string } = {
+  today: "Heute",
+  week: "Diese Woche",
+  month: "Diesen Monat",
+  year: "Dieses Jahr",
 };
 // export const sourceTypes = {
 //   public: 'öffentlich rechtlich',
@@ -30,42 +32,44 @@ export type Category = {
 
 export const categories: Category[] = [
   {
-    label: 'Film & Animation',
-    bgColor: 'bg-blue-800',
+    label: "Film & Animation",
+    bgColor: "bg-blue-800",
     icon: faCameraMovie,
   },
   {
-    label: 'Gaming',
-    bgColor: 'bg-red-800',
+    label: "Gaming",
+    bgColor: "bg-red-800",
     icon: faGamepadAlt,
   },
   {
-    label: 'Musik, Tiere, Sport',
-    bgColor: 'bg-green-900',
+    label: "Musik, Tiere, Sport",
+    bgColor: "bg-green-900",
     icon: faMusic,
   },
   {
-    label: 'Menschen & Blogs',
-    bgColor: 'bg-yellow-800',
+    label: "Menschen & Blogs",
+    bgColor: "bg-yellow-800",
     icon: faUserFriends,
   },
   {
-    label: 'Nachrichten & Politik',
-    bgColor: 'bg-gray-600',
+    label: "Nachrichten & Politik",
+    bgColor: "bg-gray-600",
     icon: faNewspaper,
   },
 ];
 
 export const createColumnItems = () => {
   const createItem = (id: number) => {
+    const age = sample(Object.keys(ageTypes)) as string;
     return {
       id,
       baseRank: random(1, true),
       category: sample(categories) as Category,
       hasAd: random(0, 10) < 5,
       hasPublicSource: random(0, 10) < 5,
-      age: sample(Object.keys(ageTypes)) as string,
+      age,
       fav: random(30, 99),
+      isVisible: age === defaultAge,
     };
   };
   const usedIds: number[] = [];
@@ -81,13 +85,13 @@ export const createColumnItems = () => {
   };
 
   return orderByDistance(
-    times(20, () => createItem(createUniqueItemId())),
+    times(itemCount, () => createItem(createUniqueItemId())),
     []
   );
 };
 
-export type Selection = {
-  type: 'category';
+export type CategorySelection = {
+  type: "category";
   label: string;
   value: number;
   minValue: number;
@@ -96,7 +100,7 @@ export type Selection = {
 
 export const orderByDistance = (
   items: ColumnItem[],
-  selection: Selection[]
+  categorySelection: CategorySelection[]
 ) => {
   // const selectionKeys = Object.keys(_.pickBy(selection, (v) => v !== '0'));
 
@@ -109,7 +113,7 @@ export const orderByDistance = (
   // console.log(selection);
   // console.log(selectionKeys);
 
-  const catSelection = selection.filter((x) => x.type === 'category');
+  const catSelection = categorySelection.filter((x) => x.type === "category");
 
   const catSelectionKeys = catSelection.map(
     ({ label }: { label: any }) => label
@@ -137,7 +141,7 @@ export const orderByDistance = (
     return { ...item, dist };
   });
 
-  return orderBy(orderedData, ['dist']).map((item) =>
+  return orderBy(orderedData, ["dist"]).map((item) =>
     pick(item, Object.keys(items[0]))
   ) as ColumnItem[];
 };

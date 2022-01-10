@@ -1,6 +1,6 @@
-import { uniqueId } from 'lodash';
-import create from 'zustand';
-import { categories } from 'src/stores/model';
+import { uniqueId } from "lodash";
+import create from "zustand";
+import { ageTypes, categories, defaultAge } from "src/stores/model";
 
 export type ControlElement = {
   [key: string]: any;
@@ -16,6 +16,7 @@ export type UserPanel = {
   columnId: string;
   controlGroups: {
     categories: ControlGroup;
+    age: ControlGroup;
   };
 };
 
@@ -24,9 +25,9 @@ type UserPanelsStore = {
   add: (columnId: string) => void;
   setControlValue: (
     columnId: string,
-    groupSlug: 'categories',
+    groupSlug: "categories" | "age",
     controlLabel: string,
-    value: number
+    value: number | boolean
   ) => void;
   remove: (id: string) => void;
   removeByColumnId: (columnId: string) => void;
@@ -38,18 +39,26 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
   add: (columnId) =>
     set((state) => {
       const newPanel = {
-        id: uniqueId('panel'),
+        id: uniqueId("panel"),
         columnId,
         controlGroups: {
           categories: {
-            label: 'Kategorien',
+            label: "Kategorien",
             controls: categories.map(({ label, bgColor }) => ({
-              type: 'slider',
+              type: "slider",
               bgColor,
               label,
               value: 0,
               minValue: 0,
               maxValue: 10,
+            })),
+          },
+          age: {
+            label: "Aktualität",
+            controls: Object.keys(ageTypes).map((key) => ({
+              key: key,
+              label: ageTypes[key],
+              value: key === defaultAge ? true : false,
             })),
           },
         },

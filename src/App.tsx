@@ -1,14 +1,14 @@
-import React, { useEffect, useRef, MutableRefObject, createRef } from 'react';
-import { Column } from 'src/components/Column';
-import { Header } from 'src/components/Header';
-import { UserPanel } from 'src/components/Panel';
+import React, { useEffect, useRef, MutableRefObject, createRef } from "react";
+import { Column } from "src/components/Column";
+import { Header } from "src/components/Header";
+import { UserPanel } from "src/components/UserPanel";
 import {
   ColumnItem,
   ControlElement,
   useColumnStore,
   useUserPanelStore,
-} from 'src/stores';
-import { orderByDistance, Selection } from 'src/stores/model';
+} from "src/stores";
+import { orderByDistance, CategorySelection } from "src/stores/model";
 
 function App() {
   const columns = useColumnStore((state) => state.columns);
@@ -22,25 +22,39 @@ function App() {
     );
   const maxColumns = 3;
   const canAddColumn = columns.length < maxColumns;
-  const onCategoryChange = (columnId: string) => {
-    const allCategories = userPanels
-      .find((panel) => panel.columnId === columnId)
-      ?.controlGroups.categories.controls.map(
-        ({ label, value, minValue, maxValue }: ControlElement): Selection => ({
-          type: 'category',
-          label,
-          value,
-          minValue,
-          maxValue,
-        })
-      );
+  const onControlPanelChange = (columnId: string) => {
+    const panel = userPanels.find((panel) => panel.columnId === columnId);
+    const allCategories = panel?.controlGroups.categories.controls.map(
+      ({
+        label,
+        value,
+        minValue,
+        maxValue,
+      }: ControlElement): CategorySelection => ({
+        type: "category",
+        label,
+        value,
+        minValue,
+        maxValue,
+      })
+    );
     if (!allCategories) {
       return;
     }
 
-    const oldItems = columnItems[columnId];
-    const selection = allCategories;
-    const newItems = orderByDistance(oldItems, selection);
+    const ageSelection = panel?.controlGroups.age.controls.find(
+      ({ value }) => value === true
+    );
+    const oldItems = columnItems[columnId].map((item) => {
+      // filter old items (age)
+      if (ageSelection?.key) {
+        item.isVisible = item.age === ageSelection.key;
+      }
+
+      return item;
+    });
+    const categorySelection = allCategories;
+    const newItems = orderByDistance(oldItems, categorySelection);
 
     setColumnItems(columnId, newItems as ColumnItem[]);
   };
@@ -50,7 +64,7 @@ function App() {
   useEffect(addColumn, []);
 
   useEffect(() => {
-    console.count('rendered');
+    console.count("rendered");
   });
 
   return (
@@ -83,7 +97,7 @@ function App() {
               column={column}
               columnElement={columnRefs.current[columnId]}
               controlGroups={controlGroups}
-              onChange={() => onCategoryChange(columnId)}
+              onChange={() => onControlPanelChange(columnId)}
             />
           )
         );

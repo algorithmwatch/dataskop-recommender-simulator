@@ -1,18 +1,19 @@
-import { useTransition, animated } from 'react-spring';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { useTransition, animated } from "react-spring";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faHeart,
   faTrashAlt,
   IconDefinition,
   faSlidersV,
-} from '@fortawesome/pro-regular-svg-icons';
-import { ForwardedRef, forwardRef, MouseEventHandler, ReactNode } from 'react';
+} from "@fortawesome/pro-regular-svg-icons";
+import { ForwardedRef, forwardRef, MouseEventHandler, ReactNode } from "react";
 import {
   Column as ColumnType,
   ColumnItem,
   useColumnStore,
   useUserPanelStore,
-} from 'src/stores';
+} from "src/stores";
+import classNames from "classnames";
 
 interface ColumnProps extends ColumnType {
   ref: any;
@@ -51,8 +52,8 @@ function HeaderButton({
       onClick={onClick}
       className={`${
         isActive
-          ? 'ring-2 ring-gray-900 bg-white'
-          : 'bg-gray-300 hover:bg-gray-900 hover:text-white'
+          ? "ring-2 ring-gray-900 bg-white"
+          : "bg-gray-300 hover:bg-gray-900 hover:text-white"
       } text-gray-900 text-xl rounded-full w-10 h-10 transition-all `}
     >
       <FontAwesomeIcon icon={icon} />
@@ -110,11 +111,19 @@ export const Column = forwardRef(
           style={{ height, top: `-${paddingHeight}px` }}
         >
           {transitions(
-            (style, { id: itemId, category, hasAd, age, fav }, t, index) => (
+            (
+              style,
+              { id: itemId, category, hasAd, age, fav, isVisible },
+              t,
+              index
+            ) => (
               <animated.div
-                className={`${category?.bgColor} absolute w-full flex items-center justify-between h-7 mb-0.5 px-1.5 text-white hover:bg-opacity-80`}
+                className={classNames(
+                  `${category?.bgColor} absolute w-full flex items-center justify-between h-7 mb-0.5 px-1.5 text-white hover:bg-opacity-80`,
+                  { "bg-opacity-40 hover:bg-opacity-40": !isVisible }
+                )}
                 style={{
-                  willChange: 'transform, height, opacity',
+                  willChange: "transform, height, opacity",
                   zIndex: items.length - index,
                   ...style,
                 }}
@@ -128,7 +137,7 @@ export const Column = forwardRef(
                     {category && <FontAwesomeIcon icon={category.icon} />}
                   </div>
                   <div className="flex items-center">
-                    {age === 'today' && (
+                    {age === "today" && (
                       <Badge className="bg-blue-500">NEU</Badge>
                     )}
                     {hasAd && <Badge className="bg-red-500">AD</Badge>}

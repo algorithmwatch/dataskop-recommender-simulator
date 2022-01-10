@@ -1,7 +1,7 @@
-import firstNames from 'src/components/Column/first_names.json';
-import { sample, uniqueId, omit } from 'lodash';
-import { Category, createColumnItems } from 'src/stores/model';
-import create from 'zustand';
+import firstNames from "src/components/Column/first_names.json";
+import { sample, uniqueId, omit } from "lodash";
+import { Category, createColumnItems } from "src/stores/model";
+import create from "zustand";
 
 export type ColumnItem = {
   id: number;
@@ -11,6 +11,7 @@ export type ColumnItem = {
   hasPublicSource: boolean;
   age: string;
   fav: number;
+  isVisible: boolean;
 };
 
 export type Column = {
@@ -20,7 +21,7 @@ export type Column = {
 
 type ColumnsStore = {
   columns: Column[];
-  items: { [key: Column['id']]: ColumnItem[] };
+  items: { [key: Column["id"]]: ColumnItem[] };
   add: () => void;
   remove: (id: string) => void;
   setItems: (id: string, items: ColumnItem[]) => void;
@@ -33,7 +34,7 @@ export const useColumnStore = create<ColumnsStore>((set) => ({
   add: () =>
     set((state) => {
       const newColumn = {
-        id: uniqueId('column'),
+        id: uniqueId("column"),
         name: sample(firstNames) as string,
       };
 
