@@ -141,7 +141,13 @@ export const orderByDistance = (
     return { ...item, dist };
   });
 
-  return orderBy(orderedData, ["dist"]).map((item) =>
-    pick(item, Object.keys(items[0]))
-  ) as ColumnItem[];
+  const orderedCategoties = orderBy(
+    orderedData,
+    ["isVisible", "dist"],
+    ["desc", "asc"]
+  ).map((item) => pick(item, Object.keys(items[0]))) as ColumnItem[];
+
+  // orderedCategoties.sort((a, b) => (a.isVisible ? 0 : 1));
+
+  return orderedCategoties;
 };

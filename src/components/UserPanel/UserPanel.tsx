@@ -43,7 +43,6 @@ export function UserPanel({
   const x = columnRect.x + columnRect.width / 2;
   const y = window.innerHeight / 2;
   const setControlValue = useUserPanelStore((state) => state.setControlValue);
-  const [age, setAge] = useState<string>("month");
 
   return (
     <Panel x={x} y={y}>

@@ -82,9 +82,9 @@ export const Column = forwardRef(
       })),
       {
         key: (item: any) => item.id,
-        from: { height: 0, opacity: 0 },
-        leave: { height: 0, opacity: 0 },
-        enter: ({ y, height }) => ({ y, height, opacity: 1 }),
+        from: { height: 0 },
+        leave: { height: 0 },
+        enter: ({ y, height }) => ({ y, height }),
         update: ({ y, height }) => ({ y, height }),
       }
     );
@@ -120,10 +120,10 @@ export const Column = forwardRef(
               <animated.div
                 className={classNames(
                   `${category?.bgColor} absolute w-full flex items-center justify-between h-7 mb-0.5 px-1.5 text-white hover:bg-opacity-80`,
-                  { "bg-opacity-40 hover:bg-opacity-40": !isVisible }
+                  { "opacity-40": !isVisible }
                 )}
                 style={{
-                  willChange: "transform, height, opacity",
+                  willChange: "transform, height",
                   zIndex: items.length - index,
                   ...style,
                 }}
