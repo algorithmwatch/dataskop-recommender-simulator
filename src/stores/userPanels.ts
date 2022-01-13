@@ -1,7 +1,6 @@
 import { uniqueId } from "lodash";
 import create from "zustand";
 import { ageTypes, categories, defaultAge } from "src/stores/model";
-import { devtools } from "zustand/middleware";
 
 export type ControlElement = {
   [key: string]: any;
