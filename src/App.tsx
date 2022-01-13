@@ -8,7 +8,7 @@ import {
   useColumnStore,
   useUserPanelStore,
 } from "src/stores";
-import { orderByDistance, CategorySelection, AgeType } from "src/stores/model";
+import { orderByDistance, CategorySelection } from "src/stores/model";
 import { usePlatformPanelStore } from "src/stores/platformPanel";
 import Switch from "react-switch";
 import "tippy.js/dist/tippy.css";

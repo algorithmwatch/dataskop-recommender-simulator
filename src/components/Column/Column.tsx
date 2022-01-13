@@ -14,7 +14,6 @@ import {
   useUserPanelStore,
 } from "src/stores";
 import classNames from "classnames";
-import { ageTypes } from "src/stores/model";
 
 interface ColumnProps extends ColumnType {
   ref: any;
