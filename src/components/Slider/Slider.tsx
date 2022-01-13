@@ -1,8 +1,9 @@
-import ReactSlider from 'react-slider';
-import { ControlElement } from 'src/stores';
+import ReactSlider from "react-slider";
+import { ControlElement } from "src/stores";
 
 export function Slider({
   label,
+  value,
   bgColor,
   minValue,
   maxValue,
@@ -13,6 +14,7 @@ export function Slider({
     <div>
       <div className="text-sm">{label}</div>
       <ReactSlider
+        value={value}
         className="w-full h-5"
         thumbClassName={`w-5 h-5 ${bgColor} rounded-full text-white text-center text-sm cursor-pointer`}
         trackClassName={`top-2 h-1 ${bgColor} bg-opacity-50 cursor-pointer`}

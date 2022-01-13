@@ -66,9 +66,8 @@ export const Column = forwardRef(
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const removeColumn = useColumnStore((state) => state.remove);
-    const addUserPanel = useUserPanelStore((state) => state.add);
-    const removeUserPanelByColumnId = useUserPanelStore(
-      (state) => state.removeByColumnId
+    const setIsVisibleByColumnId = useUserPanelStore(
+      (state) => state.setIsVisibleByColumnId
     );
     let height = 0;
     const paddingHeight = 2;
@@ -100,9 +99,7 @@ export const Column = forwardRef(
             <HeaderButton icon={faTrashAlt} onClick={() => removeColumn(id)} />
             <HeaderButton
               icon={faSlidersV}
-              onClick={() =>
-                hasPanel ? removeUserPanelByColumnId(id) : addUserPanel(id)
-              }
+              onClick={() => setIsVisibleByColumnId(id, !hasPanel)}
               isActive={hasPanel}
             />
           </div>

@@ -67,6 +67,7 @@ export function UserPanel({
               (controlElement: ControlElement) => (
                 <Slider
                   key={controlElement.label}
+                  value={controlElement.value}
                   onChange={(value: number) => {
                     setControlValue(
                       column.id,

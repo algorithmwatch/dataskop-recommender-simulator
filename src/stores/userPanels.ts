@@ -1,6 +1,7 @@
 import { uniqueId } from "lodash";
 import create from "zustand";
 import { ageTypes, categories, defaultAge } from "src/stores/model";
+import { devtools } from "zustand/middleware";
 
 export type ControlElement = {
   [key: string]: any;
@@ -14,6 +15,7 @@ export type ControlGroup = {
 export type UserPanel = {
   id: string;
   columnId: string;
+  isVisible?: boolean;
   controlGroups: {
     categories: ControlGroup;
     age: ControlGroup;
@@ -31,84 +33,101 @@ type UserPanelsStore = {
     value: number | boolean
   ) => void;
   remove: (id: string) => void;
+  setIsVisibleByColumnId: (columnId: string, value: boolean) => void;
   removeByColumnId: (columnId: string) => void;
 };
 
-export const useUserPanelStore = create<UserPanelsStore>((set) => ({
-  panels: [],
+export const useUserPanelStore = create<UserPanelsStore>(
+  devtools((set) => ({
+    panels: [],
 
-  add: (columnId) =>
-    set((state) => {
-      const newPanel = {
-        id: uniqueId("panel"),
-        columnId,
-        controlGroups: {
-          categories: {
-            label: "Kategorien",
-            controls: categories.map(({ label, bgColor }) => ({
-              key: label,
-              type: "slider",
-              bgColor,
-              label,
-              value: 0,
-              minValue: 0,
-              maxValue: 10,
-            })),
+    add: (columnId) =>
+      set((state) => {
+        const newPanel = {
+          id: uniqueId("panel"),
+          isVisible: false,
+          columnId,
+          controlGroups: {
+            categories: {
+              label: "Kategorien",
+              controls: categories.map(({ label, bgColor }) => ({
+                key: label,
+                type: "slider",
+                bgColor,
+                label,
+                value: 0,
+                minValue: 0,
+                maxValue: 10,
+              })),
+            },
+            age: {
+              label: "Aktualität",
+              controls: Object.keys(ageTypes).map((key) => ({
+                key,
+                label: ageTypes[key].label,
+                value: key === defaultAge ? true : false,
+              })),
+            },
+            hasAd: {
+              label: "Werbung vermeiden",
+              controls: [
+                {
+                  key: "advertisment",
+                  label: "Werbung vermeiden",
+                  value: false,
+                },
+              ],
+            },
           },
-          age: {
-            label: "Aktualität",
-            controls: Object.keys(ageTypes).map((key) => ({
-              key,
-              label: ageTypes[key].label,
-              value: key === defaultAge ? true : false,
-            })),
-          },
-          hasAd: {
-            label: "Werbung vermeiden",
-            controls: [
-              {
-                key: "advertisment",
-                label: "Werbung vermeiden",
-                value: false,
-              },
-            ],
-          },
-        },
-      };
+        };
 
-      return {
-        panels: [...state.panels, newPanel],
-      };
-    }),
-
-  setControlValue: (columnId, groupSlug, controlkey, value) =>
-    set((state) => ({
-      panels: state.panels.map((panel) => {
-        if (panel.columnId !== columnId) {
-          return panel;
-        }
-
-        const nextPanel = { ...panel };
-        const wantedControlElement = nextPanel.controlGroups[
-          groupSlug
-        ].controls.find((controlEl) => controlEl.key === controlkey);
-        if (!wantedControlElement) {
-          return panel;
-        }
-
-        wantedControlElement.value = value;
-
-        return nextPanel;
+        return {
+          panels: [...state.panels, newPanel],
+        };
       }),
-    })),
 
-  remove: (id) =>
-    set((state) => ({
-      panels: state.panels.filter((panel) => panel.id !== id),
-    })),
+    setControlValue: (columnId, groupSlug, controlkey, value) =>
+      set((state) => ({
+        panels: state.panels.map((panel) => {
+          if (panel.columnId !== columnId) {
+            return panel;
+          }
 
-  removeByColumnId: (columnId) =>
-    set((state) => ({
-      panels: state.panels.filter((panel) => panel.columnId !== columnId),
-    })),
-}));
+          const nextPanel = { ...panel };
+          const wantedControlElement = nextPanel.controlGroups[
+            groupSlug
+          ].controls.find((controlEl) => controlEl.key === controlkey);
+          if (!wantedControlElement) {
+            return panel;
+          }
+
+          wantedControlElement.value = value;
+
+          return nextPanel;
+        }),
+      })),
+
+    remove: (id) =>
+      set((state) => ({
+        panels: state.panels.filter((panel) => panel.id !== id),
+      })),
+
+    setIsVisibleByColumnId: (columnId, value) =>
+      set((state) => ({
+        panels: state.panels.map((panel) => {
+          if (panel.columnId !== columnId) {
+            return panel;
+          }
+
+          panel.isVisible = value;
+
+          return panel;
+        }),
+      })),
+
+    removeByColumnId: (columnId) =>
+      set((state) => ({
+        panels: state.panels.filter((panel) => panel.columnId !== columnId),
+      })),
+  }))
+);

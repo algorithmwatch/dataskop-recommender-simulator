@@ -22,7 +22,7 @@ export type Column = {
 type ColumnsStore = {
   columns: Column[];
   items: { [key: Column["id"]]: ColumnItem[] };
-  add: () => void;
+  add: (id: string) => void;
   remove: (id: string) => void;
   setItems: (id: string, items: ColumnItem[]) => void;
 };
@@ -31,10 +31,10 @@ export const useColumnStore = create<ColumnsStore>((set) => ({
   columns: [],
   items: {},
 
-  add: () =>
+  add: (id) =>
     set((state) => {
       const newColumn = {
-        id: uniqueId("column"),
+        id,
         name: sample(firstNames) as string,
       };
 

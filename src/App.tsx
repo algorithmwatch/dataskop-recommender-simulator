@@ -12,12 +12,21 @@ import { orderByDistance, CategorySelection } from "src/stores/model";
 import { usePlatformPanelStore } from "src/stores/platformPanel";
 import Switch from "react-switch";
 import "tippy.js/dist/tippy.css";
+import { uniqueId } from "lodash";
 
 function App() {
   const columns = useColumnStore((state) => state.columns);
   const columnItems = useColumnStore((state) => state.items);
   const setColumnItems = useColumnStore((state) => state.setItems);
-  const addColumn = useColumnStore((state) => state.add);
+  const addColumnFn = useColumnStore((state) => state.add);
+  const addUserPanel = useUserPanelStore((state) => state.add);
+  const addColumn = () => {
+    const columnId = uniqueId("column");
+    addColumnFn(columnId);
+    setTimeout(() => {
+      addUserPanel(columnId);
+    }, 0);
+  };
   const userPanels = useUserPanelStore((state) => state.panels);
   const platformIsVisible = usePlatformPanelStore((state) => state.isVisible);
   const columnRefs: MutableRefObject<{ [key: string]: HTMLDivElement }> =
@@ -136,13 +145,19 @@ function App() {
             id={id}
             name={name}
             items={columnItems[id]}
-            hasPanel={userPanels.some((panel) => panel.columnId === id)}
+            hasPanel={userPanels.some(
+              (panel) => panel.columnId === id && panel.isVisible
+            )}
           ></Column>
         ))}
       </div>
 
       {/* Floating panels */}
-      {userPanels.map(({ id, columnId, controlGroups }) => {
+      {userPanels.map(({ id, columnId, isVisible, controlGroups }) => {
+        if (!isVisible) {
+          return null;
+        }
+
         const column = columns.find((col) => col.id === columnId);
 
         return (
