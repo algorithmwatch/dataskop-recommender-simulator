@@ -17,6 +17,7 @@ export type UserPanel = {
   controlGroups: {
     categories: ControlGroup;
     age: ControlGroup;
+    hasAd: ControlGroup;
   };
 };
 
@@ -25,8 +26,8 @@ type UserPanelsStore = {
   add: (columnId: string) => void;
   setControlValue: (
     columnId: string,
-    groupSlug: "categories" | "age",
-    controlLabel: string,
+    groupSlug: "categories" | "age" | "hasAd",
+    controlkey: string,
     value: number | boolean
   ) => void;
   remove: (id: string) => void;
@@ -45,6 +46,7 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
           categories: {
             label: "Kategorien",
             controls: categories.map(({ label, bgColor }) => ({
+              key: label,
               type: "slider",
               bgColor,
               label,
@@ -56,10 +58,20 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
           age: {
             label: "Aktualität",
             controls: Object.keys(ageTypes).map((key) => ({
-              key: key,
+              key,
               label: ageTypes[key].label,
               value: key === defaultAge ? true : false,
             })),
+          },
+          hasAd: {
+            label: "Werbung vermeiden",
+            controls: [
+              {
+                key: "advertisment",
+                label: "Werbung vermeiden",
+                value: false,
+              },
+            ],
           },
         },
       };
@@ -69,7 +81,7 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
       };
     }),
 
-  setControlValue: (columnId, groupSlug, controlLabel, value) =>
+  setControlValue: (columnId, groupSlug, controlkey, value) =>
     set((state) => ({
       panels: state.panels.map((panel) => {
         if (panel.columnId !== columnId) {
@@ -79,7 +91,7 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
         const nextPanel = { ...panel };
         const wantedControlElement = nextPanel.controlGroups[
           groupSlug
-        ].controls.find((controlEl) => controlEl.label === controlLabel);
+        ].controls.find((controlEl) => controlEl.key === controlkey);
         if (!wantedControlElement) {
           return panel;
         }

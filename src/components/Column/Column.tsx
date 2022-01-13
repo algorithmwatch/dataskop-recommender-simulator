@@ -14,6 +14,7 @@ import {
   useUserPanelStore,
 } from "src/stores";
 import classNames from "classnames";
+import { ageTypes } from "src/stores/model";
 
 interface ColumnProps extends ColumnType {
   ref: any;
@@ -75,16 +76,18 @@ export const Column = forwardRef(
     const itemHeight = 28;
     // example from: https://codesandbox.io/s/github/pmndrs/react-spring/tree/master/demo/src/sandboxes/list-reordering?file=/src/App.tsx
     const transitions = useTransition(
-      items.map((item, index) => ({
-        ...item,
-        height: itemHeight,
-        y: (height += itemHeight + paddingHeight) - itemHeight,
-      })),
+      items
+        .filter((item) => item.isVisible)
+        .map((item, index) => ({
+          ...item,
+          height: itemHeight,
+          y: (height += itemHeight + paddingHeight) - itemHeight,
+        })),
       {
         key: (item: any) => item.id,
-        from: { height: 0 },
-        leave: { height: 0 },
-        enter: ({ y, height }) => ({ y, height }),
+        from: { height: 0, opacity: 0 },
+        leave: { height: 0, opacity: 0 },
+        enter: ({ y, height }) => ({ y, height, opacity: 1 }),
         update: ({ y, height }) => ({ y, height }),
       }
     );
@@ -119,11 +122,10 @@ export const Column = forwardRef(
             ) => (
               <animated.div
                 className={classNames(
-                  `${category?.bgColor} absolute w-full flex items-center justify-between h-7 mb-0.5 px-1.5 text-white hover:bg-opacity-80`,
-                  { "opacity-40": !isVisible }
+                  `${category?.bgColor} absolute w-full flex items-center justify-between h-7 mb-0.5 px-1.5 text-white hover:bg-opacity-80`
                 )}
                 style={{
-                  willChange: "transform, height",
+                  willChange: "transform, height, opacity",
                   zIndex: items.length - index,
                   ...style,
                 }}
@@ -137,9 +139,9 @@ export const Column = forwardRef(
                     {category && <FontAwesomeIcon icon={category.icon} />}
                   </div>
                   <div className="flex items-center">
-                    {age === "today" && (
+                    {/* {age === ageTypes["today"].value && (
                       <Badge className="bg-blue-500">NEU</Badge>
-                    )}
+                    )} */}
                     {hasAd && <Badge className="bg-red-500">AD</Badge>}
                   </div>
                 </div>

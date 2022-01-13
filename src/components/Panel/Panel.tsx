@@ -14,9 +14,10 @@ export function Panel({
 }) {
   return (
     <Rnd
-      className="z-50 p-5 bg-white bg-opacity-95 shadow-hard border-2 border-gray-900"
+      className="p-5 bg-white bg-opacity-95 shadow-hard border-2 border-gray-900"
       dragHandleClassName="drag-handle"
       enableResizing={false}
+      style={{ zIndex: 9999 }}
       default={{
         x,
         y,

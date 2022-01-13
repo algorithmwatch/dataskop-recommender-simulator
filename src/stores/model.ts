@@ -10,13 +10,38 @@ import {
 import { distance } from "mathjs";
 import { ColumnItem } from "src/stores";
 
-const itemCount = 50;
-export const defaultAge = "month";
-export const ageTypes: { [key: string]: { label: any; percent: number } } = {
-  today: { label: "Heute", percent: 5 },
-  week: { label: "Diese Woche", percent: 10 },
-  month: { label: "Diesen Monat", percent: 20 },
-  year: { label: "Dieses Jahr", percent: 60 },
+export const defaultAge = "year";
+const today = new Date();
+export type AgeType = { label: any; itemsCount: Function; dateFrom: Date };
+export const ageTypes: { [key: string]: AgeType } = {
+  today: {
+    label: "Heute",
+    itemsCount: () => random(3, 7),
+    dateFrom: new Date(today.setHours(0, 0, 0, 0)),
+  },
+  week: {
+    label: "Diese Woche",
+    itemsCount: () => random(12, 16),
+    dateFrom: new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() - 7
+    ),
+  },
+  month: {
+    label: "Diesen Monat",
+    itemsCount: () => random(20, 40),
+    dateFrom: new Date(today.setMonth(new Date().getMonth() - 1)),
+  },
+  year: {
+    label: "Dieses Jahr",
+    itemsCount: () => random(60, 90),
+    dateFrom: new Date(
+      today.getFullYear() - 1,
+      today.getMonth(),
+      today.getDate()
+    ),
+  },
 };
 // export const sourceTypes = {
 //   public: 'öffentlich rechtlich',
@@ -58,8 +83,18 @@ export const categories: Category[] = [
   },
 ];
 
+function randomDate(start: Date, end: Date) {
+  return new Date(
+    start.getTime() + Math.random() * (end.getTime() - start.getTime())
+  );
+}
+
+function dateCheck(from: Date, to: Date, check: Date) {
+  return check <= to && check >= from;
+}
+
 export const createColumnItems = () => {
-  const createItem = (id: number, age: string) => {
+  const createItem = (id: number, age: Date) => {
     return {
       id,
       baseRank: random(1, true),
@@ -68,7 +103,7 @@ export const createColumnItems = () => {
       hasPublicSource: random(0, 10) < 5,
       age,
       fav: random(30, 99),
-      isVisible: age === defaultAge,
+      isVisible: true,
     };
   };
   const usedIds: number[] = [];
@@ -82,20 +117,15 @@ export const createColumnItems = () => {
       return id;
     }
   };
-  const percentage = (percentToGet: number, number: number) =>
-    (percentToGet / 100) * number;
 
   const items = Object.keys(ageTypes).flatMap((key) => {
-    const { percent } = ageTypes[key];
-    const count = Math.round(percentage(percent, itemCount));
-    return times(count, () => createItem(createUniqueItemId(), key));
+    const { itemsCount, dateFrom } = ageTypes[key];
+    return times(itemsCount(), () =>
+      createItem(createUniqueItemId(), randomDate(dateFrom, new Date()))
+    );
   });
 
-  return orderByDistance(
-    // times(itemCount, () => createItem(createUniqueItemId())),
-    items,
-    []
-  );
+  return orderByDistance(items, []);
 };
 
 export type CategorySelection = {
@@ -108,18 +138,20 @@ export type CategorySelection = {
 
 export const orderByDistance = (
   items: ColumnItem[],
-  categorySelection: CategorySelection[]
+  categorySelection: CategorySelection[],
+  ageSelection?: string,
+  hasAdSelection?: boolean
 ) => {
-  // const selectionKeys = Object.keys(_.pickBy(selection, (v) => v !== '0'));
+  const age = ageSelection || defaultAge;
 
-  // const dataKeys = Object.keys(items[0]);
-  // const keys = _.intersection(selectionKeys, dataKeys);
+  items = items.map((item) => {
+    // filter old items (age)
+    item.isVisible =
+      dateCheck(ageTypes[age].dateFrom, new Date(), item.age) &&
+      !(item.hasAd && hasAdSelection === true);
 
-  // if (!keys.length) return items;
-
-  // const selectionValues = keys.map((x) => selection[x]);
-  // console.log(selection);
-  // console.log(selectionKeys);
+    return item;
+  });
 
   const catSelection = categorySelection.filter((x) => x.type === "category");
 
@@ -151,8 +183,8 @@ export const orderByDistance = (
 
   const orderedCategoties = orderBy(
     orderedData,
-    ["isVisible", "dist"],
-    ["desc", "asc"]
+    ["isVisible", "dist", "age"],
+    ["desc", "asc", "asc"]
   ).map((item) => pick(item, Object.keys(items[0]))) as ColumnItem[];
 
   // orderedCategoties.sort((a, b) => (a.isVisible ? 0 : 1));

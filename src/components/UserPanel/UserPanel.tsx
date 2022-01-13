@@ -83,16 +83,45 @@ export function UserPanel({
                 label={label}
                 isSelected={value === true}
                 setAge={() => {
+                  if (value === true) {
+                    return;
+                  }
+
                   // first, set other values to false
-                  controlGroups.age.controls.forEach(({ label }) => {
-                    setControlValue(column.id, "age", label, false);
+                  controlGroups.age.controls.forEach(({ key: _key }) => {
+                    setControlValue(column.id, "age", _key, false);
                   });
                   // change single value
-                  setControlValue(column.id, "age", label, !value);
+                  setControlValue(column.id, "age", key, !value);
                   onChange();
                 }}
               />
             ))}
+          </div>
+        </div>
+
+        {/* Ads */}
+        <div>
+          <div className="font-bold mb-2">{controlGroups.hasAd.label}</div>
+          <div className="text-sm space-x-3">
+            <Switch
+              offColor="#444"
+              height={20}
+              width={48}
+              uncheckedIcon={false}
+              checkedIcon={false}
+              boxShadow="0px 0px 0px 2px rgba(0, 0, 0, 0.6)"
+              onChange={() => {
+                setControlValue(
+                  column.id,
+                  "hasAd",
+                  "advertisment",
+                  !controlGroups.hasAd.controls[0].value
+                );
+                onChange();
+              }}
+              checked={controlGroups.hasAd.controls[0].value === true}
+            />
           </div>
         </div>
       </div>

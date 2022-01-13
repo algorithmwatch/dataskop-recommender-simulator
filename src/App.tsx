@@ -8,7 +8,7 @@ import {
   useColumnStore,
   useUserPanelStore,
 } from "src/stores";
-import { orderByDistance, CategorySelection } from "src/stores/model";
+import { orderByDistance, CategorySelection, AgeType } from "src/stores/model";
 
 function App() {
   const columns = useColumnStore((state) => state.columns);
@@ -45,16 +45,15 @@ function App() {
     const ageSelection = panel?.controlGroups.age.controls.find(
       ({ value }) => value === true
     );
-    const oldItems = columnItems[columnId].map((item) => {
-      // filter old items (age)
-      if (ageSelection?.key) {
-        item.isVisible = item.age === ageSelection.key;
-      }
-
-      return item;
-    });
+    const oldItems = columnItems[columnId];
     const categorySelection = allCategories;
-    const newItems = orderByDistance(oldItems, categorySelection);
+    const hasAdSelection = panel?.controlGroups.hasAd.controls[0];
+    const newItems = orderByDistance(
+      oldItems,
+      categorySelection,
+      ageSelection?.key,
+      hasAdSelection?.value
+    );
 
     setColumnItems(columnId, newItems as ColumnItem[]);
   };
