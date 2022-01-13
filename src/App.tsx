@@ -1,14 +1,17 @@
-import React, { useEffect, useRef, MutableRefObject, createRef } from 'react';
-import { Column } from 'src/components/Column';
-import { Header } from 'src/components/Header';
-import { UserPanel } from 'src/components/Panel';
+import React, { useEffect, useRef, MutableRefObject, createRef } from "react";
+import { Column } from "src/components/Column";
+import { Header } from "src/components/Header";
+import { UserPanel } from "src/components/UserPanel";
 import {
   ColumnItem,
   ControlElement,
   useColumnStore,
   useUserPanelStore,
-} from 'src/stores';
-import { orderByDistance, Selection } from 'src/stores/model';
+} from "src/stores";
+import { orderByDistance, CategorySelection, AgeType } from "src/stores/model";
+import { usePlatformPanelStore } from "src/stores/platformPanel";
+import Switch from "react-switch";
+import "tippy.js/dist/tippy.css";
 
 function App() {
   const columns = useColumnStore((state) => state.columns);
@@ -16,31 +19,45 @@ function App() {
   const setColumnItems = useColumnStore((state) => state.setItems);
   const addColumn = useColumnStore((state) => state.add);
   const userPanels = useUserPanelStore((state) => state.panels);
+  const platformIsVisible = usePlatformPanelStore((state) => state.isVisible);
   const columnRefs: MutableRefObject<{ [key: string]: HTMLDivElement }> =
     useRef(
       columns.reduce((acc, cur) => ({ ...acc, [cur.id]: createRef() }), {})
     );
   const maxColumns = 3;
   const canAddColumn = columns.length < maxColumns;
-  const onCategoryChange = (columnId: string) => {
-    const allCategories = userPanels
-      .find((panel) => panel.columnId === columnId)
-      ?.controlGroups.categories.controls.map(
-        ({ label, value, minValue, maxValue }: ControlElement): Selection => ({
-          type: 'category',
-          label,
-          value,
-          minValue,
-          maxValue,
-        })
-      );
+  const onControlPanelChange = (columnId: string) => {
+    const panel = userPanels.find((panel) => panel.columnId === columnId);
+    const allCategories = panel?.controlGroups.categories.controls.map(
+      ({
+        label,
+        value,
+        minValue,
+        maxValue,
+      }: ControlElement): CategorySelection => ({
+        type: "category",
+        label,
+        value,
+        minValue,
+        maxValue,
+      })
+    );
     if (!allCategories) {
       return;
     }
 
+    const ageSelection = panel?.controlGroups.age.controls.find(
+      ({ value }) => value === true
+    );
     const oldItems = columnItems[columnId];
-    const selection = allCategories;
-    const newItems = orderByDistance(oldItems, selection);
+    const categorySelection = allCategories;
+    const hasAdSelection = panel?.controlGroups.hasAd.controls[0];
+    const newItems = orderByDistance(
+      oldItems,
+      categorySelection,
+      ageSelection?.key,
+      hasAdSelection?.value
+    );
 
     setColumnItems(columnId, newItems as ColumnItem[]);
   };
@@ -50,12 +67,66 @@ function App() {
   useEffect(addColumn, []);
 
   useEffect(() => {
-    console.count('rendered');
+    console.count("rendered");
   });
 
   return (
     <div>
       <Header addColumn={addColumn} canAddColumn={canAddColumn}></Header>
+
+      {platformIsVisible && (
+        <div className="flex justify-end items-center h-24 px-6 bg-gray-100 space-x-4">
+          <div>
+            <div className="font-bold mb-2">Verifizierte Quellen</div>
+            <div className="text-sm space-x-3">
+              <Switch
+                offColor="#666"
+                height={24}
+                width={48}
+                handleDiameter={20}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                onColor="#16a34a"
+                onChange={() => {
+                  // setControlValue(
+                  //   column.id,
+                  //   "hasAd",
+                  //   "advertisment",
+                  //   !controlGroups.hasAd.controls[0].value
+                  // );
+                  // onChange();
+                }}
+                checked={false}
+              />
+            </div>
+          </div>
+          <div>
+            <div className="font-bold mb-2">Werbung bevorzugen</div>
+            <div className="text-sm space-x-3">
+              <Switch
+                offColor="#666"
+                height={24}
+                width={48}
+                handleDiameter={20}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                onColor="#16a34a"
+                onChange={() => {
+                  // setControlValue(
+                  //   column.id,
+                  //   "hasAd",
+                  //   "advertisment",
+                  //   !controlGroups.hasAd.controls[0].value
+                  // );
+                  // onChange();
+                }}
+                checked={false}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Columns */}
       <div className="stripes flex justify-evenly mt-28">
         {columns.map(({ id, name }, index) => (
@@ -83,7 +154,7 @@ function App() {
               column={column}
               columnElement={columnRefs.current[columnId]}
               controlGroups={controlGroups}
-              onChange={() => onCategoryChange(columnId)}
+              onChange={() => onControlPanelChange(columnId)}
             />
           )
         );

@@ -1,6 +1,6 @@
-import { uniqueId } from 'lodash';
-import create from 'zustand';
-import { categories } from 'src/stores/model';
+import { uniqueId } from "lodash";
+import create from "zustand";
+import { ageTypes, categories, defaultAge } from "src/stores/model";
 
 export type ControlElement = {
   [key: string]: any;
@@ -16,6 +16,8 @@ export type UserPanel = {
   columnId: string;
   controlGroups: {
     categories: ControlGroup;
+    age: ControlGroup;
+    hasAd: ControlGroup;
   };
 };
 
@@ -24,9 +26,9 @@ type UserPanelsStore = {
   add: (columnId: string) => void;
   setControlValue: (
     columnId: string,
-    groupSlug: 'categories',
-    controlLabel: string,
-    value: number
+    groupSlug: "categories" | "age" | "hasAd",
+    controlkey: string,
+    value: number | boolean
   ) => void;
   remove: (id: string) => void;
   removeByColumnId: (columnId: string) => void;
@@ -38,19 +40,38 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
   add: (columnId) =>
     set((state) => {
       const newPanel = {
-        id: uniqueId('panel'),
+        id: uniqueId("panel"),
         columnId,
         controlGroups: {
           categories: {
-            label: 'Kategorien',
+            label: "Kategorien",
             controls: categories.map(({ label, bgColor }) => ({
-              type: 'slider',
+              key: label,
+              type: "slider",
               bgColor,
               label,
               value: 0,
               minValue: 0,
               maxValue: 10,
             })),
+          },
+          age: {
+            label: "Aktualität",
+            controls: Object.keys(ageTypes).map((key) => ({
+              key,
+              label: ageTypes[key].label,
+              value: key === defaultAge ? true : false,
+            })),
+          },
+          hasAd: {
+            label: "Werbung vermeiden",
+            controls: [
+              {
+                key: "advertisment",
+                label: "Werbung vermeiden",
+                value: false,
+              },
+            ],
           },
         },
       };
@@ -60,7 +81,7 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
       };
     }),
 
-  setControlValue: (columnId, groupSlug, controlLabel, value) =>
+  setControlValue: (columnId, groupSlug, controlkey, value) =>
     set((state) => ({
       panels: state.panels.map((panel) => {
         if (panel.columnId !== columnId) {
@@ -70,7 +91,7 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
         const nextPanel = { ...panel };
         const wantedControlElement = nextPanel.controlGroups[
           groupSlug
-        ].controls.find((controlEl) => controlEl.label === controlLabel);
+        ].controls.find((controlEl) => controlEl.key === controlkey);
         if (!wantedControlElement) {
           return panel;
         }

@@ -1,5 +1,6 @@
-import logo from 'src/assets/logo.svg';
-import { Button } from 'src/components/Button';
+import logo from "src/assets/logo.svg";
+import { Button } from "src/components/Button";
+import { usePlatformPanelStore } from "src/stores/platformPanel";
 
 export function Header({
   addColumn,
@@ -8,6 +9,10 @@ export function Header({
   addColumn: () => void;
   canAddColumn: boolean;
 }) {
+  const platformIsVisible = usePlatformPanelStore((state) => state.isVisible);
+  const setPlatformIsVisible = usePlatformPanelStore(
+    (state) => state.setIsVisible
+  );
   return (
     <header className="flex justify-between h-24 px-6 bg-white">
       <img src={logo} className="w-48" alt="logo" />
@@ -15,7 +20,9 @@ export function Header({
         <Button onClick={addColumn} disabled={!canAddColumn}>
           + User
         </Button>
-        <Button>Plattform steuern</Button>
+        <Button onClick={() => setPlatformIsVisible(!platformIsVisible)}>
+          Plattform steuern
+        </Button>
       </div>
     </header>
   );
