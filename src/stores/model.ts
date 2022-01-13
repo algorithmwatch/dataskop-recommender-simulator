@@ -10,18 +10,18 @@ import {
 import { distance } from "mathjs";
 import { ColumnItem } from "src/stores";
 
-export const defaultAge = "year";
+export const defaultAge = "month";
 const today = new Date();
 export type AgeType = { label: any; itemsCount: Function; dateFrom: Date };
 export const ageTypes: { [key: string]: AgeType } = {
   today: {
     label: "Heute",
-    itemsCount: () => random(3, 7),
+    itemsCount: () => random(1, 5),
     dateFrom: new Date(today.setHours(0, 0, 0, 0)),
   },
   week: {
     label: "Diese Woche",
-    itemsCount: () => random(12, 16),
+    itemsCount: () => random(10, 16),
     dateFrom: new Date(
       today.getFullYear(),
       today.getMonth(),
@@ -30,12 +30,12 @@ export const ageTypes: { [key: string]: AgeType } = {
   },
   month: {
     label: "Diesen Monat",
-    itemsCount: () => random(20, 40),
+    itemsCount: () => random(18, 30),
     dateFrom: new Date(today.setMonth(new Date().getMonth() - 1)),
   },
   year: {
     label: "Dieses Jahr",
-    itemsCount: () => random(60, 90),
+    itemsCount: () => random(40, 60),
     dateFrom: new Date(
       today.getFullYear() - 1,
       today.getMonth(),

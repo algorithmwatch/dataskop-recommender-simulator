@@ -9,6 +9,9 @@ import {
   useUserPanelStore,
 } from "src/stores";
 import { orderByDistance, CategorySelection, AgeType } from "src/stores/model";
+import { usePlatformPanelStore } from "src/stores/platformPanel";
+import Switch from "react-switch";
+import "tippy.js/dist/tippy.css";
 
 function App() {
   const columns = useColumnStore((state) => state.columns);
@@ -16,6 +19,7 @@ function App() {
   const setColumnItems = useColumnStore((state) => state.setItems);
   const addColumn = useColumnStore((state) => state.add);
   const userPanels = useUserPanelStore((state) => state.panels);
+  const platformIsVisible = usePlatformPanelStore((state) => state.isVisible);
   const columnRefs: MutableRefObject<{ [key: string]: HTMLDivElement }> =
     useRef(
       columns.reduce((acc, cur) => ({ ...acc, [cur.id]: createRef() }), {})
@@ -69,6 +73,60 @@ function App() {
   return (
     <div>
       <Header addColumn={addColumn} canAddColumn={canAddColumn}></Header>
+
+      {platformIsVisible && (
+        <div className="flex justify-end items-center h-24 px-6 bg-gray-100 space-x-4">
+          <div>
+            <div className="font-bold mb-2">Verifizierte Quellen</div>
+            <div className="text-sm space-x-3">
+              <Switch
+                offColor="#666"
+                height={24}
+                width={48}
+                handleDiameter={20}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                onColor="#16a34a"
+                onChange={() => {
+                  // setControlValue(
+                  //   column.id,
+                  //   "hasAd",
+                  //   "advertisment",
+                  //   !controlGroups.hasAd.controls[0].value
+                  // );
+                  // onChange();
+                }}
+                checked={false}
+              />
+            </div>
+          </div>
+          <div>
+            <div className="font-bold mb-2">Werbung bevorzugen</div>
+            <div className="text-sm space-x-3">
+              <Switch
+                offColor="#666"
+                height={24}
+                width={48}
+                handleDiameter={20}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                onColor="#16a34a"
+                onChange={() => {
+                  // setControlValue(
+                  //   column.id,
+                  //   "hasAd",
+                  //   "advertisment",
+                  //   !controlGroups.hasAd.controls[0].value
+                  // );
+                  // onChange();
+                }}
+                checked={false}
+              />
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Columns */}
       <div className="stripes flex justify-evenly mt-28">
         {columns.map(({ id, name }, index) => (

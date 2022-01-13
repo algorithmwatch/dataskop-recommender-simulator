@@ -4,6 +4,9 @@ import { Slider } from "src/components/Slider/Slider";
 import { Column as ColumnType, UserPanel as UserPanelType } from "src/stores";
 import Switch from "react-switch";
 import classNames from "classnames";
+import Tippy from "@tippyjs/react";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
 
 export interface UserPanelProps extends UserPanelType {
   column: ColumnType;
@@ -51,7 +54,14 @@ export function UserPanel({
       <div className="space-y-4">
         {/* Categories */}
         <div>
-          <div className="font-bold mb-2">{controlGroups.categories.label}</div>
+          <div className="font-bold mb-2">
+            <span>{controlGroups.categories.label}</span>
+            <Tippy content="Hier stehen weitere Infos">
+              <span className="cursor-help">
+                <FontAwesomeIcon icon={faQuestionCircle} className="ml-1" />
+              </span>
+            </Tippy>
+          </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-2">
             {controlGroups.categories.controls.map(
               (controlElement: ControlElement) => (
@@ -75,7 +85,14 @@ export function UserPanel({
 
         {/* Age */}
         <div>
-          <div className="font-bold mb-2">{controlGroups.age.label}</div>
+          <div className="font-bold mb-2">
+            <span>{controlGroups.age.label}</span>
+            <Tippy content="Hier stehen weitere Infos">
+              <span className="cursor-help">
+                <FontAwesomeIcon icon={faQuestionCircle} className="ml-1" />
+              </span>
+            </Tippy>
+          </div>
           <div className="text-sm space-x-3">
             {controlGroups.age.controls.map(({ key, label, value }) => (
               <AgeButton
@@ -102,17 +119,23 @@ export function UserPanel({
 
         {/* Ads */}
         <div>
-          <div className="font-bold mb-2">{controlGroups.hasAd.label}</div>
+          <div className="font-bold mb-2">
+            <span>{controlGroups.hasAd.label}</span>
+            <Tippy content="Hier stehen weitere Infos">
+              <span className="cursor-help">
+                <FontAwesomeIcon icon={faQuestionCircle} className="ml-1" />
+              </span>
+            </Tippy>
+          </div>
           <div className="text-sm space-x-3">
             <Switch
               offColor="#666"
-              // height={22}
-              // width={48}
-              handleDiameter={22}
+              height={24}
+              width={48}
+              handleDiameter={20}
               uncheckedIcon={false}
               checkedIcon={false}
               onColor="#16a34a"
-              // boxShadow="0px 0px 0px 2px rgba(0, 0, 0, 0.6)"
               onChange={() => {
                 setControlValue(
                   column.id,
