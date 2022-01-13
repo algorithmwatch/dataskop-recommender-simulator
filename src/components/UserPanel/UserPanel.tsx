@@ -105,12 +105,14 @@ export function UserPanel({
           <div className="font-bold mb-2">{controlGroups.hasAd.label}</div>
           <div className="text-sm space-x-3">
             <Switch
-              offColor="#444"
-              height={20}
-              width={48}
+              offColor="#666"
+              // height={22}
+              // width={48}
+              handleDiameter={22}
               uncheckedIcon={false}
               checkedIcon={false}
-              boxShadow="0px 0px 0px 2px rgba(0, 0, 0, 0.6)"
+              onColor="#16a34a"
+              // boxShadow="0px 0px 0px 2px rgba(0, 0, 0, 0.6)"
               onChange={() => {
                 setControlValue(
                   column.id,
