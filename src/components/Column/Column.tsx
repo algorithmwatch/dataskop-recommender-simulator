@@ -69,6 +69,9 @@ export const Column = forwardRef(
     const setIsVisibleByColumnId = useUserPanelStore(
       (state) => state.setIsVisibleByColumnId
     );
+    const removeUserPanelByColumnId = useUserPanelStore(
+      (state) => state.removeByColumnId
+    );
     let height = 0;
     const paddingHeight = 2;
     const itemHeight = 28;
@@ -96,7 +99,13 @@ export const Column = forwardRef(
         <div className="relative h-20 flex items-center justify-center">
           <h2 className="text-3xl font-bold">{name}</h2>
           <div className="flex items-center space-x-2 absolute right-0">
-            <HeaderButton icon={faTrashAlt} onClick={() => removeColumn(id)} />
+            <HeaderButton
+              icon={faTrashAlt}
+              onClick={() => {
+                removeColumn(id);
+                removeUserPanelByColumnId(id);
+              }}
+            />
             <HeaderButton
               icon={faSlidersV}
               onClick={() => setIsVisibleByColumnId(id, !hasPanel)}

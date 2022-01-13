@@ -1,5 +1,5 @@
 import firstNames from "src/components/Column/first_names.json";
-import { sample, uniqueId, omit } from "lodash";
+import { sample, omit } from "lodash";
 import { Category, createColumnItems } from "src/stores/model";
 import create from "zustand";
 
