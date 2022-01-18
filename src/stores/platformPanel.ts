@@ -21,6 +21,8 @@ export type PlatformPanel = {
 
 type PlatformPanelStore = {
   isVisible: boolean;
+  monetarisation: number;
+  setMonetarisation: (value: number) => void;
   setIsVisible: (value: boolean) => void;
   // setControlValue: (
   //   columnId: string,
@@ -33,6 +35,11 @@ type PlatformPanelStore = {
 
 export const usePlatformPanelStore = create<PlatformPanelStore>((set) => ({
   isVisible: false,
+
+  monetarisation: 0,
+
+  setMonetarisation: (value: number) =>
+    set((state) => ({ monetarisation: value })),
 
   setIsVisible: (value) => set((state) => ({ isVisible: value })),
   // panel: {}

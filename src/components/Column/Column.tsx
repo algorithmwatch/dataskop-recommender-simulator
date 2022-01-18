@@ -121,7 +121,7 @@ export const Column = forwardRef(
           {transitions(
             (
               style,
-              { id: itemId, category, hasAd, age, fav, isVisible },
+              { id: itemId, category, hasAd, age, baseRank, isVisible },
               t,
               index
             ) => (
@@ -152,7 +152,9 @@ export const Column = forwardRef(
                 </div>
                 <div className="flex items-center">
                   <FontAwesomeIcon icon={faHeart} />
-                  <span className="ml-0.5 text-sm">{fav}%</span>
+                  <span className="ml-0.5 text-sm">
+                    {Math.round((1 - baseRank) * 100)}%
+                  </span>
                 </div>
               </animated.div>
             )

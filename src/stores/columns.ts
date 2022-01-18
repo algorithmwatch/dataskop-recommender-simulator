@@ -10,7 +10,6 @@ export type ColumnItem = {
   hasAd: boolean;
   hasPublicSource: boolean;
   age: Date;
-  fav: number;
   isVisible: boolean;
 };
 

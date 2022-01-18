@@ -102,7 +102,6 @@ export const createColumnItems = () => {
       hasAd: random(0, 10) < 5,
       hasPublicSource: random(0, 10) < 5,
       age,
-      fav: random(30, 99),
       isVisible: true,
     };
   };
@@ -139,6 +138,7 @@ export type CategorySelection = {
 export const orderByDistance = (
   items: ColumnItem[],
   categorySelection: CategorySelection[],
+  monetarisation: number = 0,
   ageSelection?: string,
   hasAdSelection?: boolean
 ) => {
@@ -148,7 +148,7 @@ export const orderByDistance = (
     // filter old items (age)
     item.isVisible =
       dateCheck(ageTypes[age].dateFrom, new Date(), item.age) &&
-      !(item.hasAd && hasAdSelection === true);
+      !(item.hasAd && hasAdSelection === true && monetarisation === 0);
 
     return item;
   });
@@ -163,7 +163,12 @@ export const orderByDistance = (
       value / maxValue
   );
 
-  const selectionValues = catSelectionValues.concat([0]);
+  let adFactor = 0.005;
+
+  const monValue = [0];
+  monValue.push(Math.pow(adFactor, -Math.abs(monetarisation / 10)));
+
+  const selectionValues = catSelectionValues.concat(monValue);
   // weightVector(catSelectionKeys, keys, catSelectionValues, selection);
 
   const orderedData = items.map((item) => {
@@ -174,7 +179,10 @@ export const orderByDistance = (
     const catValues = fill(Array(catSelection.length), 0);
     catValues[catIndex] = 1;
 
-    const itemValues = catValues.concat([item.baseRank]);
+    const monValue2 = [item.baseRank];
+    monValue2.push(item.hasAd ? 1 * adFactor : 0);
+
+    const itemValues = catValues.concat(monValue2);
     // weightVector(selectionKeys, keys, subset, selection);
     // console.log(catSelectionValues, itemValues);
     const dist = distance(selectionValues, itemValues);

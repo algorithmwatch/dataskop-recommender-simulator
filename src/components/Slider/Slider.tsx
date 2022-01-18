@@ -3,16 +3,18 @@ import { ControlElement } from "src/stores";
 
 export function Slider({
   label,
+  hiddenLabel = false,
   value,
   bgColor,
   minValue,
   maxValue,
   onChange,
+  onAfterChange,
 }: ControlElement) {
   // const elementId = kebabCase(label);
   return (
     <div>
-      <div className="text-sm">{label}</div>
+      {!hiddenLabel && <div className="text-sm">{label}</div>}
       <ReactSlider
         value={value}
         className="w-full h-5"
@@ -22,6 +24,7 @@ export function Slider({
         max={maxValue}
         renderThumb={(props, state) => <div {...props}>{state.valueNow}</div>}
         onChange={onChange}
+        onAfterChange={onAfterChange}
       />
     </div>
   );

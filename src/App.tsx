@@ -13,6 +13,7 @@ import { usePlatformPanelStore } from "src/stores/platformPanel";
 import Switch from "react-switch";
 import "tippy.js/dist/tippy.css";
 import { uniqueId } from "lodash";
+import { Slider } from "./components/Slider/Slider";
 
 function App() {
   const columns = useColumnStore((state) => state.columns);
@@ -29,13 +30,25 @@ function App() {
   };
   const userPanels = useUserPanelStore((state) => state.panels);
   const platformIsVisible = usePlatformPanelStore((state) => state.isVisible);
+  const setMonetarsation = usePlatformPanelStore(
+    (state) => state.setMonetarisation
+  );
+  const monetarisation = usePlatformPanelStore((state) => state.monetarisation);
   const columnRefs: MutableRefObject<{ [key: string]: HTMLDivElement }> =
     useRef(
       columns.reduce((acc, cur) => ({ ...acc, [cur.id]: createRef() }), {})
     );
   const maxColumns = 3;
   const canAddColumn = columns.length < maxColumns;
-  const onControlPanelChange = (columnId: string) => {
+  const onPlatformControlChange = (monetarisation: number) => {
+    const columnIds = columns.map((c) => c.id);
+    columnIds.forEach((id, index) => {
+      setTimeout(() => {
+        onControlPanelChange(id, monetarisation);
+      }, index * 400);
+    });
+  };
+  const onControlPanelChange = (columnId: string, monetarisation?: number) => {
     const panel = userPanels.find((panel) => panel.columnId === columnId);
     const allCategories = panel?.controlGroups.categories.controls.map(
       ({
@@ -60,10 +73,12 @@ function App() {
     );
     const oldItems = columnItems[columnId];
     const categorySelection = allCategories;
+    const moni = monetarisation;
     const hasAdSelection = panel?.controlGroups.hasAd.controls[0];
     const newItems = orderByDistance(
       oldItems,
       categorySelection,
+      moni,
       ageSelection?.key,
       hasAdSelection?.value
     );
@@ -110,26 +125,19 @@ function App() {
             </div>
           </div>
           <div>
-            <div className="font-bold mb-2">Werbung bevorzugen</div>
+            <div className="font-bold mb-2">Monetarisierung</div>
             <div className="text-sm space-x-3">
-              <Switch
-                offColor="#666"
-                height={24}
-                width={48}
-                handleDiameter={20}
-                uncheckedIcon={false}
-                checkedIcon={false}
-                onColor="#16a34a"
-                onChange={() => {
-                  // setControlValue(
-                  //   column.id,
-                  //   "hasAd",
-                  //   "advertisment",
-                  //   !controlGroups.hasAd.controls[0].value
-                  // );
-                  // onChange();
+              <Slider
+                label="test"
+                hiddenLabel
+                value={monetarisation}
+                bgColor="bg-red-500"
+                minValue={0}
+                maxValue={10}
+                onChange={(value: number) => {
+                  setMonetarsation(value);
+                  onPlatformControlChange(value);
                 }}
-                checked={false}
               />
             </div>
           </div>
@@ -169,7 +177,11 @@ function App() {
               column={column}
               columnElement={columnRefs.current[columnId]}
               controlGroups={controlGroups}
-              onChange={() => onControlPanelChange(columnId)}
+              onChange={() => {
+                setTimeout(() => {
+                  onControlPanelChange(columnId, monetarisation);
+                }, 0);
+              }}
             />
           )
         );
