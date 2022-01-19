@@ -99,10 +99,10 @@ function App() {
       <Header addColumn={addColumn} canAddColumn={canAddColumn}></Header>
 
       {platformIsVisible && (
-        <div className="flex justify-end items-center h-24 px-6 bg-gray-100 space-x-4">
+        <div className="flex justify-center items-center h-24 px-6 bg-gray-100 space-x-6">
           <div>
             <div className="font-bold mb-2">Verifizierte Quellen</div>
-            <div className="text-sm space-x-3">
+            <div className="h-8">
               <Switch
                 offColor="#666"
                 height={24}
@@ -126,7 +126,7 @@ function App() {
           </div>
           <div>
             <div className="font-bold mb-2">Monetarisierung</div>
-            <div className="text-sm space-x-3">
+            <div className="h-8">
               <Slider
                 label="test"
                 hiddenLabel
