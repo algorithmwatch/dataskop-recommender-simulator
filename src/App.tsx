@@ -42,10 +42,8 @@ function App() {
   const canAddColumn = columns.length < maxColumns;
   const onPlatformControlChange = (monetarisation: number) => {
     const columnIds = columns.map((c) => c.id);
-    columnIds.forEach((id, index) => {
-      setTimeout(() => {
-        onControlPanelChange(id, monetarisation);
-      }, index * 400);
+    columnIds.forEach((id) => {
+      onControlPanelChange(id, monetarisation);
     });
   };
   const onControlPanelChange = (columnId: string, monetarisation?: number) => {
