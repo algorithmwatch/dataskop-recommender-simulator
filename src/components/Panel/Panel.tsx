@@ -1,7 +1,5 @@
 import { ReactNode } from "react";
 import { Rnd } from "react-rnd";
-import { faGripHorizontal } from "@fortawesome/pro-light-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export function Panel({
   x,
