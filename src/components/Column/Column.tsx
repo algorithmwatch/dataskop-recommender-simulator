@@ -6,6 +6,7 @@ import {
   IconDefinition,
   faSlidersV,
 } from "@fortawesome/pro-regular-svg-icons";
+import { faBadgeCheck } from "@fortawesome/pro-solid-svg-icons";
 import { ForwardedRef, forwardRef, MouseEventHandler, ReactNode } from "react";
 import {
   Column as ColumnType,
@@ -121,7 +122,15 @@ export const Column = forwardRef(
           {transitions(
             (
               style,
-              { id: itemId, category, hasAd, age, baseRank, isVisible },
+              {
+                id: itemId,
+                category,
+                hasAd,
+                age,
+                baseRank,
+                isVisible,
+                hasPublicSource,
+              },
               t,
               index
             ) => (
@@ -143,12 +152,15 @@ export const Column = forwardRef(
                   <div className="w-9">
                     {category && <FontAwesomeIcon icon={category.icon} />}
                   </div>
-                  <div className="flex items-center">
-                    {/* {age === ageTypes["today"].value && (
-                      <Badge className="bg-blue-500">NEU</Badge>
-                    )} */}
-                    {hasAd && <Badge className="bg-red-500">AD</Badge>}
+                  <div className="w-8">
+                    {hasPublicSource && <FontAwesomeIcon icon={faBadgeCheck} />}
                   </div>
+                  {/* <div className="">
+                    {age === ageTypes["today"].value && (
+                      <Badge className="bg-blue-500">NEU</Badge>
+                    )}
+                  </div> */}
+                  {hasAd && <Badge className="bg-red-500">AD</Badge>}
                 </div>
                 <div className="flex items-center">
                   <FontAwesomeIcon icon={faHeart} />

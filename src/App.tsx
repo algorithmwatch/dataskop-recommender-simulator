@@ -34,21 +34,34 @@ function App() {
     (state) => state.setMonetarisation
   );
   const monetarisation = usePlatformPanelStore((state) => state.monetarisation);
+  const setHasPublicSource = usePlatformPanelStore(
+    (state) => state.setHasPublicSource
+  );
+  const hasPublicSource = usePlatformPanelStore(
+    (state) => state.hasPublicSource
+  );
   const columnRefs: MutableRefObject<{ [key: string]: HTMLDivElement }> =
     useRef(
       columns.reduce((acc, cur) => ({ ...acc, [cur.id]: createRef() }), {})
     );
   const maxColumns = 3;
   const canAddColumn = columns.length < maxColumns;
-  const onPlatformControlChange = (monetarisation: number) => {
+  const onPlatformControlChange = (
+    monetarisation: number,
+    hasPublicSource: boolean
+  ) => {
     const columnIds = columns.map((c) => c.id);
     columnIds.forEach((id, index) => {
-      setTimeout(() => {
-        onControlPanelChange(id, monetarisation);
-      }, index * 300);
+      onControlPanelChange(id, monetarisation, hasPublicSource);
+      // setTimeout(() => {
+      // }, index * 300);
     });
   };
-  const onControlPanelChange = (columnId: string, monetarisation?: number) => {
+  const onControlPanelChange = (
+    columnId: string,
+    monetarisation?: number,
+    hasPublicSource?: boolean
+  ) => {
     const panel = userPanels.find((panel) => panel.columnId === columnId);
     const allCategories = panel?.controlGroups.categories.controls.map(
       ({
@@ -79,6 +92,7 @@ function App() {
       oldItems,
       categorySelection,
       moni,
+      hasPublicSource,
       ageSelection?.key,
       hasAdSelection?.value
     );
@@ -101,30 +115,6 @@ function App() {
       {platformIsVisible && (
         <div className="flex justify-center items-center h-24 px-6 bg-gray-100 space-x-6">
           <div>
-            <div className="font-bold mb-2">Verifizierte Quellen</div>
-            <div className="h-8">
-              <Switch
-                offColor="#666"
-                height={24}
-                width={48}
-                handleDiameter={20}
-                uncheckedIcon={false}
-                checkedIcon={false}
-                onColor="#16a34a"
-                onChange={() => {
-                  // setControlValue(
-                  //   column.id,
-                  //   "hasAd",
-                  //   "advertisment",
-                  //   !controlGroups.hasAd.controls[0].value
-                  // );
-                  // onChange();
-                }}
-                checked={false}
-              />
-            </div>
-          </div>
-          <div>
             <div className="font-bold mb-2">Monetarisierung</div>
             <div className="h-8">
               <Slider
@@ -136,8 +126,27 @@ function App() {
                 maxValue={10}
                 onChange={(value: number) => {
                   setMonetarsation(value);
-                  onPlatformControlChange(value);
+                  onPlatformControlChange(value, hasPublicSource);
                 }}
+              />
+            </div>
+          </div>
+          <div>
+            <div className="font-bold mb-2">Verifizierte Quellen</div>
+            <div className="h-8">
+              <Switch
+                offColor="#666"
+                height={24}
+                width={48}
+                handleDiameter={20}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                onColor="#16a34a"
+                onChange={() => {
+                  setHasPublicSource(!hasPublicSource);
+                  onPlatformControlChange(monetarisation, !hasPublicSource);
+                }}
+                checked={hasPublicSource}
               />
             </div>
           </div>

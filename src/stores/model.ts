@@ -139,6 +139,7 @@ export const orderByDistance = (
   items: ColumnItem[],
   categorySelection: CategorySelection[],
   monetarisation: number = 0,
+  hasPublicSource?: boolean,
   ageSelection?: string,
   hasAdSelection?: boolean
 ) => {
@@ -147,6 +148,7 @@ export const orderByDistance = (
   items = items.map((item) => {
     // filter old items (age)
     item.isVisible =
+      (hasPublicSource === true ? item.hasPublicSource === true : true) &&
       dateCheck(ageTypes[age].dateFrom, new Date(), item.age) &&
       !(item.hasAd && hasAdSelection === true && monetarisation === 0);
 
