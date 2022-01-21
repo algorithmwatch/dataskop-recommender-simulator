@@ -20,7 +20,10 @@ export function Header({
         <Button onClick={addColumn} disabled={!canAddColumn}>
           + User
         </Button>
-        <Button onClick={() => setPlatformIsVisible(!platformIsVisible)}>
+        <Button
+          theme={platformIsVisible ? "outlineActive" : "outline"}
+          onClick={() => setPlatformIsVisible(!platformIsVisible)}
+        >
           Plattform steuern
         </Button>
       </div>

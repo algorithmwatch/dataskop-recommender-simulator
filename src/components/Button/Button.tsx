@@ -1,13 +1,13 @@
-import { IconDefinition } from '@fortawesome/pro-regular-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Tippy, { TippyProps } from '@tippyjs/react';
-import cn from 'classnames';
-import { MouseEvent, ReactNode } from 'react';
+import { IconDefinition } from "@fortawesome/pro-regular-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Tippy, { TippyProps } from "@tippyjs/react";
+import cn from "classnames";
+import { MouseEvent, ReactNode } from "react";
 
 export interface ButtonProps {
-  type?: 'button' | 'submit';
-  size?: 'small' | 'normal' | 'large';
-  theme?: 'outline' | 'link';
+  type?: "button" | "submit";
+  size?: "small" | "normal" | "large";
+  theme?: "outline" | "link" | "outlineActive";
   startIcon?: IconDefinition;
   endIcon?: IconDefinition;
   classNames?: string;
@@ -18,12 +18,12 @@ export interface ButtonProps {
 }
 
 export function Button({
-  type = 'button',
-  size = 'normal',
-  theme = 'outline',
+  type = "button",
+  size = "normal",
+  theme = "outline",
   startIcon,
   endIcon,
-  classNames = '',
+  classNames = "",
   disabled = false,
   tippyOptions,
   onClick,
@@ -34,7 +34,7 @@ export function Button({
 
   if (startIcon) {
     buttonContent.push(
-      <span key="start-icon" className={size === 'large' ? 'mr-2.5' : 'mr-2'}>
+      <span key="start-icon" className={size === "large" ? "mr-2.5" : "mr-2"}>
         <FontAwesomeIcon icon={startIcon} />
       </span>
     );
@@ -48,7 +48,7 @@ export function Button({
 
   if (endIcon) {
     buttonContent.push(
-      <span key="end-icon" className={size === 'large' ? 'ml-2.5' : 'ml-2'}>
+      <span key="end-icon" className={size === "large" ? "ml-2.5" : "ml-2"}>
         <FontAwesomeIcon icon={endIcon} />
       </span>
     );
@@ -57,15 +57,17 @@ export function Button({
   // set button classes
 
   const buttonSize = {
-    small: 'px-3 py-2.5 text-sm',
-    normal: 'px-5 py-4 text-base',
-    large: 'px-6 py-5 text-xl',
+    small: "px-3 py-2.5 text-sm",
+    normal: "px-5 py-4 text-base",
+    large: "px-6 py-5 text-xl",
   };
 
   const buttonTheme = {
     outline:
-      'border-2 border-gray-900 shadow-hard active:shadow-none hover:underline focus:underline focus:outline-none disabled:opacity-50 disabled:pointer-events-none',
-    link: 'focus:outline-none hover:underline disabled:opacity-20',
+      "border-2 border-gray-900 shadow-hard active:shadow-none hover:underline focus:underline focus:outline-none disabled:opacity-50 disabled:pointer-events-none",
+    outlineActive:
+      "bg-black text-white border-2 border-gray-900 underline underline focus:outline-none disabled:opacity-50 disabled:pointer-events-none",
+    link: "focus:outline-none hover:underline disabled:opacity-20",
   };
 
   const button = (
