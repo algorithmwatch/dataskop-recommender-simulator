@@ -113,7 +113,18 @@ function App() {
       <Header addColumn={addColumn} canAddColumn={canAddColumn}></Header>
 
       {platformIsVisible && (
-        <div className="flex justify-center items-center h-24 px-6 bg-gray-100 space-x-6">
+        <div className="relative flex justify-center items-center border-t-4 border-b-4 border-black h-32 px-6 bg-white space-x-6">
+          <svg
+            className="absolute right-24 -top-5"
+            width="40"
+            height="20"
+            viewBox="0 0 40 20"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M20 0L39.0526 19.5H0.947441L20 0Z" fill="black" />
+          </svg>
+
           <div>
             <div className="font-bold mb-2">Monetarisierung</div>
             <div className="h-8">
@@ -121,7 +132,7 @@ function App() {
                 label="test"
                 hiddenLabel
                 value={monetarisation}
-                bgColor="bg-red-500"
+                bgColor="bg-black"
                 minValue={0}
                 maxValue={10}
                 onChange={(value: number) => {
