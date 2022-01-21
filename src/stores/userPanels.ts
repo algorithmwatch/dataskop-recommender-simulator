@@ -15,6 +15,7 @@ export type UserPanel = {
   id: string;
   columnId: string;
   isVisible?: boolean;
+  zIndex: number;
   controlGroups: {
     categories: ControlGroup;
     age: ControlGroup;
@@ -24,7 +25,8 @@ export type UserPanel = {
 
 type UserPanelsStore = {
   panels: UserPanel[];
-  add: (columnId: string) => void;
+  add: (panelId: string, columnId: string) => void;
+  bringToFront: (panelId: string) => void;
   setControlValue: (
     columnId: string,
     groupSlug: "categories" | "age" | "hasAd",
@@ -39,11 +41,12 @@ type UserPanelsStore = {
 export const useUserPanelStore = create<UserPanelsStore>((set) => ({
   panels: [],
 
-  add: (columnId) =>
+  add: (id, columnId) =>
     set((state) => {
       const newPanel = {
-        id: uniqueId("panel"),
+        id,
         isVisible: false,
+        zIndex: 900,
         columnId,
         controlGroups: {
           categories: {
@@ -81,6 +84,27 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
 
       return {
         panels: [...state.panels, newPanel],
+      };
+    }),
+
+  bringToFront: (panelId) =>
+    set((state) => {
+      // get z-index from all panels
+      const zIndexes = state.panels.map((p) => p.zIndex);
+      const highestIndex = Math.max(...zIndexes);
+      const nextIndex = highestIndex + 1;
+
+      return {
+        panels: state.panels.map((panel) => {
+          if (panel.id !== panelId) {
+            return panel;
+          }
+
+          const nextPanel = { ...panel };
+          nextPanel.zIndex = nextIndex;
+
+          return nextPanel;
+        }),
       };
     }),
 

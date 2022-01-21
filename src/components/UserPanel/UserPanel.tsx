@@ -35,18 +35,20 @@ function AgeButton({
 
 export function UserPanel({
   id,
+  zIndex,
   column,
   columnElement,
   controlGroups,
   onChange,
 }: UserPanelProps) {
   const columnRect = columnElement.getBoundingClientRect();
-  const x = columnRect.x + columnRect.width / 2;
+  const x = columnRect.x + columnRect.width / 2 - 380 / 2 + 50;
   const y = window.innerHeight / 2;
   const setControlValue = useUserPanelStore((state) => state.setControlValue);
+  const bringToFront = useUserPanelStore((state) => state.bringToFront);
 
   return (
-    <Panel x={x} y={y}>
+    <Panel x={x} y={y} zIndex={zIndex} onMouseDown={() => bringToFront(id)}>
       {/* User name */}
       <div className="font-bold text-xl mb-2.5">{column?.name}</div>
 

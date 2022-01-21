@@ -21,11 +21,14 @@ function App() {
   const setColumnItems = useColumnStore((state) => state.setItems);
   const addColumnFn = useColumnStore((state) => state.add);
   const addUserPanel = useUserPanelStore((state) => state.add);
+  const bringToFront = useUserPanelStore((state) => state.bringToFront);
   const addColumn = () => {
     const columnId = uniqueId("column");
     addColumnFn(columnId);
     setTimeout(() => {
-      addUserPanel(columnId);
+      const panelId = uniqueId("panel");
+      addUserPanel(panelId, columnId);
+      bringToFront(panelId);
     }, 0);
   };
   const userPanels = useUserPanelStore((state) => state.panels);
@@ -59,8 +62,8 @@ function App() {
   };
   const onControlPanelChange = (
     columnId: string,
-    monetarisation?: number,
-    hasPublicSource?: boolean
+    monetarisation: number,
+    hasPublicSource: boolean
   ) => {
     const panel = userPanels.find((panel) => panel.columnId === columnId);
     const allCategories = panel?.controlGroups.categories.controls.map(
@@ -181,7 +184,7 @@ function App() {
       </div>
 
       {/* Floating panels */}
-      {userPanels.map(({ id, columnId, isVisible, controlGroups }) => {
+      {userPanels.map(({ id, columnId, isVisible, zIndex, controlGroups }) => {
         if (!isVisible) {
           return null;
         }
@@ -193,13 +196,18 @@ function App() {
             <UserPanel
               key={id}
               id={id}
+              zIndex={zIndex}
               columnId={columnId}
               column={column}
               columnElement={columnRefs.current[columnId]}
               controlGroups={controlGroups}
               onChange={() => {
                 setTimeout(() => {
-                  onControlPanelChange(columnId, monetarisation);
+                  onControlPanelChange(
+                    columnId,
+                    monetarisation,
+                    hasPublicSource
+                  );
                 }, 0);
               }}
             />

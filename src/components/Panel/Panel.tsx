@@ -6,18 +6,23 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 export function Panel({
   x,
   y,
+  zIndex,
+  onMouseDown,
   children,
 }: {
   x: number;
   y: number;
+  zIndex?: number;
+  onMouseDown?: () => void;
   children: ReactNode;
 }) {
   return (
     <Rnd
+      onMouseDown={onMouseDown}
       className="p-5 bg-white bg-opacity-95 shadow-hard border-2 border-gray-900"
-      dragHandleClassName="drag-handle"
+      // dragHandleClassName="drag-handle"
       enableResizing={false}
-      style={{ zIndex: 9999 }}
+      style={{ zIndex: zIndex ? zIndex : 9999 }}
       default={{
         x,
         y,
@@ -25,7 +30,7 @@ export function Panel({
         height: "auto",
       }}
     >
-      <button
+      {/* <button
         type="button"
         className="drag-handle z-50 absolute right-3 top-3 cursor-move"
       >
@@ -34,7 +39,7 @@ export function Panel({
           className="pointer-events-none select-none"
           size="lg"
         />
-      </button>
+      </button> */}
       <div className="relative w-full h-full">{children}</div>
     </Rnd>
   );
