@@ -21,7 +21,6 @@ import Switch from "react-switch";
 import "tippy.js/dist/tippy.css";
 import { uniqueId } from "lodash";
 import { Slider } from "./components/Slider/Slider";
-import { Button } from "./components/Button";
 import itemList from "./items-list.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/pro-regular-svg-icons";
@@ -257,6 +256,7 @@ function App() {
               <FontAwesomeIcon className="ml-0.5" icon={faCheck} />
             )}
           </button>
+          <div>/</div>
           <button
             type="button"
             className={
