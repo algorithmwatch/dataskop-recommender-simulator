@@ -1,9 +1,16 @@
-import React, { useEffect, useRef, MutableRefObject, createRef } from "react";
+import React, {
+  useEffect,
+  useRef,
+  MutableRefObject,
+  createRef,
+  useState,
+} from "react";
 import { Column } from "src/components/Column";
 import { Header } from "src/components/Header";
 import { UserPanel } from "src/components/UserPanel";
 import {
   ColumnItem,
+  ColumnItemExported,
   ControlElement,
   useColumnStore,
   useUserPanelStore,
@@ -14,6 +21,14 @@ import Switch from "react-switch";
 import "tippy.js/dist/tippy.css";
 import { uniqueId } from "lodash";
 import { Slider } from "./components/Slider/Slider";
+import { Button } from "./components/Button";
+import itemList from "./items-list.json";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCheck } from "@fortawesome/pro-regular-svg-icons";
+
+type Mode = "static" | "procedural";
+const staticItemsList = itemList as ColumnItemExported[];
+const showExportButtons = /[?&]export/.test(window.location.search);
 
 function App() {
   const columns = useColumnStore((state) => state.columns);
@@ -22,14 +37,21 @@ function App() {
   const addColumnFn = useColumnStore((state) => state.add);
   const addUserPanel = useUserPanelStore((state) => state.add);
   const bringToFront = useUserPanelStore((state) => state.bringToFront);
+  const [mode] = useState<Mode>(
+    (localStorage.getItem("mode") as Mode | null) || "static"
+  );
   const addColumn = () => {
     const columnId = uniqueId("column");
-    addColumnFn(columnId);
+    addColumnFn(columnId, mode === "static" ? staticItemsList : undefined);
     setTimeout(() => {
       const panelId = uniqueId("panel");
       addUserPanel(panelId, columnId);
       bringToFront(panelId);
     }, 0);
+  };
+  const switchMode = (value: typeof mode) => {
+    localStorage.setItem("mode", value);
+    window.location.reload();
   };
   const userPanels = useUserPanelStore((state) => state.panels);
   const platformIsVisible = usePlatformPanelStore((state) => state.isVisible);
@@ -113,6 +135,7 @@ function App() {
     <div>
       <Header addColumn={addColumn} canAddColumn={canAddColumn}></Header>
 
+      {/* Horizontal platform panel */}
       {platformIsVisible && (
         <div className="relative flex justify-center items-center border-t-4 border-b-4 border-black h-32 px-6 bg-white space-x-6">
           <svg
@@ -165,23 +188,7 @@ function App() {
         </div>
       )}
 
-      {/* Columns */}
-      <div className="stripes flex justify-evenly mt-28">
-        {columns.map(({ id, name }, index) => (
-          <Column
-            key={id}
-            ref={(el: HTMLDivElement) => (columnRefs.current[id] = el)}
-            id={id}
-            name={name}
-            items={columnItems[id]}
-            hasPanel={userPanels.some(
-              (panel) => panel.columnId === id && panel.isVisible
-            )}
-          ></Column>
-        ))}
-      </div>
-
-      {/* Floating panels */}
+      {/* Floating user panels */}
       {userPanels.map(({ id, columnId, isVisible, zIndex, controlGroups }) => {
         if (!isVisible) {
           return null;
@@ -212,6 +219,62 @@ function App() {
           )
         );
       })}
+
+      {/* Columns */}
+      <div className="stripes flex justify-evenly mt-28">
+        {columns.map(({ id, name }, index) => (
+          <Column
+            key={id}
+            ref={(el: HTMLDivElement) => (columnRefs.current[id] = el)}
+            id={id}
+            name={name}
+            items={columnItems[id]}
+            hasPanel={userPanels.some(
+              (panel) => panel.columnId === id && panel.isVisible
+            )}
+            showExportButton={showExportButtons}
+          ></Column>
+        ))}
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-center py-6 px-6 space-x-2 text-xs text-gray-500">
+        <div>Modus:</div>
+        <div className="flex space-x-2">
+          <button
+            type="button"
+            className={
+              mode === "static"
+                ? "text-gray-400 cursor-auto"
+                : "hover:underline"
+            }
+            disabled={mode === "static"}
+            onClick={() => switchMode("static")}
+            title="Verwende in jeder Spalte ein und dieselbe Liste"
+          >
+            Statisch
+            {mode === "static" && (
+              <FontAwesomeIcon className="ml-0.5" icon={faCheck} />
+            )}
+          </button>
+          <button
+            type="button"
+            className={
+              mode === "procedural"
+                ? "text-gray-400 cursor-auto"
+                : "hover:underline"
+            }
+            disabled={mode === "procedural"}
+            onClick={() => switchMode("procedural")}
+            title="Verwende in jeder Spalte zufällig generierte Listen"
+          >
+            Prozedural
+            {mode === "procedural" && (
+              <FontAwesomeIcon className="ml-0.5" icon={faCheck} />
+            )}
+          </button>
+        </div>
+      </div>
     </div>
   );
 }

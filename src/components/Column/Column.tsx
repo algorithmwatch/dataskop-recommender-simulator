@@ -16,6 +16,8 @@ import {
   useUserPanelStore,
 } from "src/stores";
 import classNames from "classnames";
+import { categories } from "src/stores/model";
+import { downloadFile } from "src/utils";
 
 interface ColumnProps extends ColumnType {
   ref: any;
@@ -24,9 +26,13 @@ interface ColumnProps extends ColumnType {
   showExportButton?: boolean;
 }
 
-const exportColumn = (name: string, items: ColumnItem[]) => {
-  const output = { name, items };
-  console.warn(output);
+const exportColumn = (items: ColumnItem[]) => {
+  const newItems = items.map((item) => ({
+    ...item,
+    category: categories.findIndex((cat) => cat.label === item.category.label),
+  }));
+
+  downloadFile("items-list.json", newItems);
 };
 
 function Badge({
@@ -111,7 +117,7 @@ export const Column = forwardRef(
             {showExportButton && (
               <HeaderButton
                 icon={faFileDownload}
-                onClick={() => exportColumn(name, items)}
+                onClick={() => exportColumn(items)}
               />
             )}
             <HeaderButton

@@ -1,6 +1,6 @@
 import firstNames from "src/components/Column/first_names.json";
 import { sample, omit } from "lodash";
-import { Category, createColumnItems } from "src/stores/model";
+import { categories, Category, createColumnItems } from "src/stores/model";
 import create from "zustand";
 
 export type ColumnItem = {
@@ -13,6 +13,10 @@ export type ColumnItem = {
   isVisible: boolean;
 };
 
+export type ColumnItemExported = ColumnItem & {
+  category: number;
+};
+
 export type Column = {
   id: string;
   name: string;
@@ -21,7 +25,7 @@ export type Column = {
 type ColumnsStore = {
   columns: Column[];
   items: { [key: Column["id"]]: ColumnItem[] };
-  add: (id: string) => void;
+  add: (id: string, items?: ColumnItemExported[]) => void;
   remove: (id: string) => void;
   setItems: (id: string, items: ColumnItem[]) => void;
 };
@@ -30,16 +34,25 @@ export const useColumnStore = create<ColumnsStore>((set) => ({
   columns: [],
   items: {},
 
-  add: (id) =>
+  add: (id, items) =>
     set((state) => {
       const newColumn = {
         id,
         name: sample(firstNames) as string,
       };
+      const columnItems = items
+        ? items.map((item) => ({
+            ...item,
+            category: categories[item.category],
+          }))
+        : createColumnItems();
 
       return {
         columns: [...state.columns, newColumn],
-        items: { ...state.items, [newColumn.id]: createColumnItems() },
+        items: {
+          ...state.items,
+          [newColumn.id]: columnItems,
+        },
       };
     }),
 

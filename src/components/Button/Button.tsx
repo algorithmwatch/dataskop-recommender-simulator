@@ -57,7 +57,7 @@ export function Button({
   // set button classes
 
   const buttonSize = {
-    small: "px-3 py-2.5 text-sm",
+    small: "px-1.5 py-1.5 text-xs",
     normal: "px-5 py-4 text-base",
     large: "px-6 py-5 text-xl",
   };
@@ -67,7 +67,7 @@ export function Button({
       "border-2 border-gray-900 shadow-hard active:shadow-none hover:underline focus:underline focus:outline-none disabled:opacity-50 disabled:pointer-events-none",
     outlineActive:
       "bg-black text-white border-2 border-gray-900 underline underline focus:outline-none disabled:opacity-50 disabled:pointer-events-none",
-    link: "focus:outline-none hover:underline disabled:opacity-20",
+    link: "focus:outline-none hover:underline disabled:opacity-40",
   };
 
   const button = (
