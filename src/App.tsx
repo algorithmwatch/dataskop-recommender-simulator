@@ -55,12 +55,10 @@ function App() {
   ) => {
     const columnIds = columns.map((c) => c.id);
     columnIds.forEach((id, index) => {
-      onControlPanelChange(id, monetarisation, hasPublicSource);
-      // setTimeout(() => {
-      // }, index * 300);
+      onUserPanelControlChange(id, monetarisation, hasPublicSource);
     });
   };
-  const onControlPanelChange = (
+  const onUserPanelControlChange = (
     columnId: string,
     monetarisation: number,
     hasPublicSource: boolean
@@ -203,7 +201,7 @@ function App() {
               controlGroups={controlGroups}
               onChange={() => {
                 setTimeout(() => {
-                  onControlPanelChange(
+                  onUserPanelControlChange(
                     columnId,
                     monetarisation,
                     hasPublicSource

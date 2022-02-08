@@ -9,7 +9,7 @@ export type ColumnItem = {
   baseRank: number;
   hasAd: boolean;
   hasPublicSource: boolean;
-  age: Date;
+  age: number;
   isVisible: boolean;
 };
 

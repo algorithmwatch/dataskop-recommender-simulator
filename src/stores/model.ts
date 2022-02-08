@@ -11,43 +11,29 @@ import { distance } from "mathjs";
 import { ColumnItem } from "src/stores";
 
 export const defaultAge = "month";
-const today = new Date();
-export type AgeType = { label: any; itemsCount: Function; dateFrom: Date };
+export type AgeType = { label: any; itemsCount: Function; value: number };
 export const ageTypes: { [key: string]: AgeType } = {
   today: {
     label: "Heute",
     itemsCount: () => random(1, 5),
-    dateFrom: new Date(today.setHours(0, 0, 0, 0)),
+    value: 1,
   },
   week: {
     label: "Diese Woche",
     itemsCount: () => random(10, 16),
-    dateFrom: new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() - 7
-    ),
+    value: 2,
   },
   month: {
     label: "Diesen Monat",
     itemsCount: () => random(18, 30),
-    dateFrom: new Date(today.setMonth(new Date().getMonth() - 1)),
+    value: 3,
   },
   year: {
     label: "Dieses Jahr",
     itemsCount: () => random(40, 60),
-    dateFrom: new Date(
-      today.getFullYear() - 1,
-      today.getMonth(),
-      today.getDate()
-    ),
+    value: 4,
   },
 };
-// export const sourceTypes = {
-//   public: 'öffentlich rechtlich',
-//   private: 'privat',
-//   other: 'unbestimmt',
-// };
 
 export type Category = {
   label: string;
@@ -83,18 +69,8 @@ export const categories: Category[] = [
   },
 ];
 
-function randomDate(start: Date, end: Date) {
-  return new Date(
-    start.getTime() + Math.random() * (end.getTime() - start.getTime())
-  );
-}
-
-function dateCheck(from: Date, to: Date, check: Date) {
-  return check <= to && check >= from;
-}
-
 export const createColumnItems = () => {
-  const createItem = (id: number, age: Date) => {
+  const createItem = (id: number, age: number) => {
     return {
       id,
       baseRank: random(1, true),
@@ -118,10 +94,8 @@ export const createColumnItems = () => {
   };
 
   const items = Object.keys(ageTypes).flatMap((key) => {
-    const { itemsCount, dateFrom } = ageTypes[key];
-    return times(itemsCount(), () =>
-      createItem(createUniqueItemId(), randomDate(dateFrom, new Date()))
-    );
+    const { itemsCount, value } = ageTypes[key];
+    return times(itemsCount(), () => createItem(createUniqueItemId(), value));
   });
 
   return orderByDistance(items, []);
@@ -146,10 +120,9 @@ export const orderByDistance = (
   const age = ageSelection || defaultAge;
 
   items = items.map((item) => {
-    // filter old items (age)
     item.isVisible =
       (hasPublicSource === true ? item.hasPublicSource === true : true) &&
-      dateCheck(ageTypes[age].dateFrom, new Date(), item.age) &&
+      item.age <= ageTypes[age].value &&
       !(item.hasAd && hasAdSelection === true && monetarisation === 0);
 
     return item;

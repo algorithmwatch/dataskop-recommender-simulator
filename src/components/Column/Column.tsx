@@ -5,6 +5,7 @@ import {
   faTrashAlt,
   IconDefinition,
   faSlidersV,
+  faFileDownload,
 } from "@fortawesome/pro-regular-svg-icons";
 import { faBadgeCheck } from "@fortawesome/pro-solid-svg-icons";
 import { ForwardedRef, forwardRef, MouseEventHandler, ReactNode } from "react";
@@ -20,7 +21,13 @@ interface ColumnProps extends ColumnType {
   ref: any;
   items: ColumnItem[];
   hasPanel: boolean;
+  showExportButton?: boolean;
 }
+
+const exportColumn = (name: string, items: ColumnItem[]) => {
+  const output = { name, items };
+  console.warn(output);
+};
 
 function Badge({
   className,
@@ -61,9 +68,10 @@ function HeaderButton({
     </button>
   );
 }
+
 export const Column = forwardRef(
   (
-    { id, name, items, hasPanel }: ColumnProps,
+    { id, name, items, hasPanel, showExportButton }: ColumnProps,
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const removeColumn = useColumnStore((state) => state.remove);
@@ -100,6 +108,12 @@ export const Column = forwardRef(
         <div className="relative h-20 flex items-center justify-center">
           <h2 className="text-3xl font-bold">{name}</h2>
           <div className="flex items-center space-x-2 absolute right-0">
+            {showExportButton && (
+              <HeaderButton
+                icon={faFileDownload}
+                onClick={() => exportColumn(name, items)}
+              />
+            )}
             <HeaderButton
               icon={faTrashAlt}
               onClick={() => {
@@ -155,11 +169,6 @@ export const Column = forwardRef(
                   <div className="w-8">
                     {hasPublicSource && <FontAwesomeIcon icon={faBadgeCheck} />}
                   </div>
-                  {/* <div className="">
-                    {age === ageTypes["today"].value && (
-                      <Badge className="bg-blue-500">NEU</Badge>
-                    )}
-                  </div> */}
                   {hasAd && <Badge className="bg-red-500">AD</Badge>}
                 </div>
                 <div className="flex items-center">
