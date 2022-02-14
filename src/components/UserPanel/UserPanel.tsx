@@ -4,9 +4,11 @@ import { Slider } from "src/components/Slider/Slider";
 import { Column as ColumnType, UserPanel as UserPanelType } from "src/stores";
 import Switch from "react-switch";
 import classNames from "classnames";
-import Tippy from "@tippyjs/react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
+
+// Uncomment the next lines to add Tooltips
+// import Tippy from "@tippyjs/react";
+// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+// import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
 
 export interface UserPanelProps extends UserPanelType {
   column: ColumnType;
@@ -58,11 +60,13 @@ export function UserPanel({
         <div>
           <div className="font-bold mb-2">
             <span>{controlGroups.categories.label}</span>
-            <Tippy content="Hier stehen weitere Infos">
+
+            {/* Uncomment the next lines to add Tooltip for "Kategorien" */}
+            {/* <Tippy content="Hier stehen weitere Infos">
               <span className="cursor-help">
                 <FontAwesomeIcon icon={faQuestionCircle} className="ml-1" />
               </span>
-            </Tippy>
+            </Tippy> */}
           </div>
           <div className="grid grid-cols-2 gap-x-4 gap-y-2">
             {controlGroups.categories.controls.map(
@@ -90,11 +94,13 @@ export function UserPanel({
         <div>
           <div className="font-bold mb-2">
             <span>{controlGroups.age.label}</span>
-            <Tippy content="Hier stehen weitere Infos">
+
+            {/* Uncomment the next lines to add Tooltip for "Aktualität" */}
+            {/* <Tippy content="Hier stehen weitere Infos">
               <span className="cursor-help">
                 <FontAwesomeIcon icon={faQuestionCircle} className="ml-1" />
               </span>
-            </Tippy>
+            </Tippy> */}
           </div>
           <div className="text-sm space-x-3">
             {controlGroups.age.controls.map(({ key, label, value }) => (
@@ -124,11 +130,13 @@ export function UserPanel({
         <div>
           <div className="font-bold mb-2">
             <span>{controlGroups.hasAd.label}</span>
-            <Tippy content="Hier stehen weitere Infos">
+
+            {/* Uncomment the next lines to add Tooltip for "Werbung vermeiden" */}
+            {/* <Tippy content="Hier stehen weitere Infos">
               <span className="cursor-help">
                 <FontAwesomeIcon icon={faQuestionCircle} className="ml-1" />
               </span>
-            </Tippy>
+            </Tippy> */}
           </div>
           <div className="text-sm space-x-3">
             <Switch
