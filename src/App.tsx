@@ -188,36 +188,43 @@ function App() {
       )}
 
       {/* Floating user panels */}
-      {userPanels.map(({ id, columnId, isVisible, zIndex, controlGroups }) => {
-        if (!isVisible) {
-          return null;
-        }
+      <div
+        className="fixed -inset-0 pointer-events-none"
+        style={{ zIndex: 9000 }}
+      >
+        {userPanels.map(
+          ({ id, columnId, isVisible, zIndex, controlGroups }) => {
+            if (!isVisible) {
+              return null;
+            }
 
-        const column = columns.find((col) => col.id === columnId);
+            const column = columns.find((col) => col.id === columnId);
 
-        return (
-          column && (
-            <UserPanel
-              key={id}
-              id={id}
-              zIndex={zIndex}
-              columnId={columnId}
-              column={column}
-              columnElement={columnRefs.current[columnId]}
-              controlGroups={controlGroups}
-              onChange={() => {
-                setTimeout(() => {
-                  onUserPanelControlChange(
-                    columnId,
-                    monetarisation,
-                    hasPublicSource
-                  );
-                }, 0);
-              }}
-            />
-          )
-        );
-      })}
+            return (
+              column && (
+                <UserPanel
+                  key={id}
+                  id={id}
+                  zIndex={zIndex}
+                  columnId={columnId}
+                  column={column}
+                  columnElement={columnRefs.current[columnId]}
+                  controlGroups={controlGroups}
+                  onChange={() => {
+                    setTimeout(() => {
+                      onUserPanelControlChange(
+                        columnId,
+                        monetarisation,
+                        hasPublicSource
+                      );
+                    }, 0);
+                  }}
+                />
+              )
+            );
+          }
+        )}
+      </div>
 
       {/* Columns */}
       <div className="stripes flex justify-evenly mt-28">

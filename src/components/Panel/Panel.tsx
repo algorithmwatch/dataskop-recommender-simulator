@@ -17,7 +17,7 @@ export function Panel({
   return (
     <Rnd
       onMouseDown={onMouseDown}
-      className="p-5 bg-white bg-opacity-95 shadow-hard border-2 border-gray-900"
+      className="pointer-events-auto p-5 bg-white bg-opacity-95 shadow-hard border-2 border-gray-900"
       // dragHandleClassName="drag-handle"
       enableResizing={false}
       bounds="window"
