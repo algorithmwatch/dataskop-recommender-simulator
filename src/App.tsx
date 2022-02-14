@@ -136,7 +136,10 @@ function App() {
 
       {/* Horizontal platform panel */}
       {platformIsVisible && (
-        <div className="relative flex justify-center items-center border-t-4 border-b-4 border-black h-32 px-6 bg-white space-x-6">
+        <div
+          className="sticky top-0 inset-x-0 flex justify-center items-center border-t-4 border-b-4 border-black h-32 px-6 bg-white space-x-6"
+          style={{ zIndex: 9000 }}
+        >
           <svg
             className="absolute right-24 -top-5"
             width="40"
