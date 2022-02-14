@@ -20,6 +20,7 @@ export function Panel({
       className="p-5 bg-white bg-opacity-95 shadow-hard border-2 border-gray-900"
       // dragHandleClassName="drag-handle"
       enableResizing={false}
+      bounds="window"
       style={{ zIndex: zIndex ? zIndex : 9999 }}
       default={{
         x,
