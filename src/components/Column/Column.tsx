@@ -6,6 +6,7 @@ import {
   IconDefinition,
   faSlidersV,
   faFileDownload,
+  faCalendar,
 } from "@fortawesome/pro-regular-svg-icons";
 import { faBadgeCheck } from "@fortawesome/pro-solid-svg-icons";
 import { ForwardedRef, forwardRef, MouseEventHandler, ReactNode } from "react";
@@ -178,10 +179,16 @@ export const Column = forwardRef(
                   {hasAd && <Badge className="bg-red-500">AD</Badge>}
                 </div>
                 <div className="flex items-center">
-                  <FontAwesomeIcon icon={faHeart} />
-                  <span className="ml-0.5 text-sm">
-                    {Math.round((1 - baseRank) * 100)}%
-                  </span>
+                  <div className="w-12 flex items-center justify-start">
+                    <FontAwesomeIcon icon={faCalendar} />
+                    <span className="ml-1 text-sm tabular-nums">{age}</span>
+                  </div>
+                  <div className="w-16 flex items-center justify-end">
+                    <FontAwesomeIcon icon={faHeart} />
+                    <span className="ml-0.5 text-sm tabular-nums">
+                      {Math.round((1 - baseRank) * 100)}%
+                    </span>
+                  </div>
                 </div>
               </animated.div>
             )

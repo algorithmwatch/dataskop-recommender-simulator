@@ -62,7 +62,7 @@ function App() {
     );
     setTimeout(() => {
       const panelId = uniqueId("panel");
-      addUserPanel(panelId, columnId);
+      addUserPanel(panelId, columnId, categorySelection);
       bringToFront(panelId);
     }, 0);
   };

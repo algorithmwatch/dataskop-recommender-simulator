@@ -21,17 +21,17 @@ export const ageTypes: { [key: string]: AgeType } = {
   week: {
     label: "Diese Woche",
     itemsCount: () => random(10, 16),
-    value: 2,
+    value: 7,
   },
   month: {
     label: "Diesen Monat",
     itemsCount: () => random(18, 30),
-    value: 3,
+    value: 31,
   },
   year: {
     label: "Dieses Jahr",
     itemsCount: () => random(40, 60),
-    value: 4,
+    value: 365,
   },
 };
 
@@ -95,7 +95,9 @@ export const createColumnItems = () => {
 
   const items = Object.keys(ageTypes).flatMap((key) => {
     const { itemsCount, value } = ageTypes[key];
-    return times(itemsCount(), () => createItem(createUniqueItemId(), value));
+    return times(itemsCount(), () =>
+      createItem(createUniqueItemId(), random(1, value))
+    );
   });
 
   return items;
