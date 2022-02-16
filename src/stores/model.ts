@@ -165,11 +165,11 @@ export const orderByDistance = (
     const dist = distance(selectionValues, itemValues);
     return { ...item, dist };
   });
-
+  console.warn(orderedData);
   const orderedCategoties = orderBy(
     orderedData,
-    ["isVisible", "dist", "age"],
-    ["desc", "asc", "asc"]
+    ["dist", "age"],
+    ["asc", "asc"]
   ).map((item) => pick(item, Object.keys(items[0]))) as ColumnItem[];
 
   // orderedCategoties.sort((a, b) => (a.isVisible ? 0 : 1));
