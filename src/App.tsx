@@ -15,11 +15,15 @@ import {
   useColumnStore,
   useUserPanelStore,
 } from "src/stores";
-import { orderByDistance, CategorySelection } from "src/stores/model";
+import {
+  orderByDistance,
+  CategorySelection,
+  categories,
+} from "src/stores/model";
 import { usePlatformPanelStore } from "src/stores/platformPanel";
 import Switch from "react-switch";
 import "tippy.js/dist/tippy.css";
-import { uniqueId } from "lodash";
+import { random, uniqueId } from "lodash";
 import { Slider } from "./components/Slider/Slider";
 import itemList from "./items-list.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -36,12 +40,26 @@ function App() {
   const addColumnFn = useColumnStore((state) => state.add);
   const addUserPanel = useUserPanelStore((state) => state.add);
   const bringToFront = useUserPanelStore((state) => state.bringToFront);
+  const userPanels = useUserPanelStore((state) => state.panels);
   const [mode] = useState<Mode>(
     (localStorage.getItem("mode") as Mode | null) || "static"
   );
   const addColumn = () => {
     const columnId = uniqueId("column");
-    addColumnFn(columnId, mode === "static" ? staticItemsList : undefined);
+    const categorySelection = categories.map(
+      ({ label }): CategorySelection => ({
+        type: "category",
+        label,
+        value: random(0, 7),
+        minValue: 0,
+        maxValue: 10,
+      })
+    );
+    addColumnFn(
+      columnId,
+      mode === "static" ? staticItemsList : undefined,
+      categorySelection
+    );
     setTimeout(() => {
       const panelId = uniqueId("panel");
       addUserPanel(panelId, columnId);
@@ -52,7 +70,6 @@ function App() {
     localStorage.setItem("mode", value);
     window.location.reload();
   };
-  const userPanels = useUserPanelStore((state) => state.panels);
   const platformIsVisible = usePlatformPanelStore((state) => state.isVisible);
   const setMonetarsation = usePlatformPanelStore(
     (state) => state.setMonetarisation

@@ -1,5 +1,6 @@
 import create from "zustand";
 import { ageTypes, categories, defaultAge } from "src/stores/model";
+import { random } from "lodash";
 
 export type ControlElement = {
   [key: string]: any;
@@ -24,7 +25,7 @@ export type UserPanel = {
 
 type UserPanelsStore = {
   panels: UserPanel[];
-  add: (panelId: string, columnId: string) => void;
+  add: (panelId: string, columnId: string, randomValues?: boolean) => void;
   bringToFront: (panelId: string) => void;
   setControlValue: (
     columnId: string,
@@ -40,7 +41,7 @@ type UserPanelsStore = {
 export const useUserPanelStore = create<UserPanelsStore>((set) => ({
   panels: [],
 
-  add: (id, columnId) =>
+  add: (id, columnId, randomValues) =>
     set((state) => {
       const newPanel = {
         id,
@@ -55,7 +56,7 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
               type: "slider",
               bgColor,
               label,
-              value: 0,
+              value: random(0, 10),
               minValue: 0,
               maxValue: 10,
             })),

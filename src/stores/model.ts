@@ -98,7 +98,7 @@ export const createColumnItems = () => {
     return times(itemsCount(), () => createItem(createUniqueItemId(), value));
   });
 
-  return orderByDistance(items, []);
+  return items;
 };
 
 export type CategorySelection = {

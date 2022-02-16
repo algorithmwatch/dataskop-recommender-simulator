@@ -1,6 +1,12 @@
 import firstNames from "src/components/Column/first_names.json";
 import { sample, omit } from "lodash";
-import { categories, Category, createColumnItems } from "src/stores/model";
+import {
+  categories,
+  Category,
+  CategorySelection,
+  createColumnItems,
+  orderByDistance,
+} from "src/stores/model";
 import create from "zustand";
 
 export type ColumnItem = {
@@ -25,7 +31,11 @@ export type Column = {
 type ColumnsStore = {
   columns: Column[];
   items: { [key: Column["id"]]: ColumnItem[] };
-  add: (id: string, items?: ColumnItemExported[]) => void;
+  add: (
+    id: string,
+    items?: ColumnItemExported[],
+    categorySelection?: CategorySelection[]
+  ) => void;
   remove: (id: string) => void;
   setItems: (id: string, items: ColumnItem[]) => void;
 };
@@ -34,7 +44,7 @@ export const useColumnStore = create<ColumnsStore>((set) => ({
   columns: [],
   items: {},
 
-  add: (id, items) =>
+  add: (id, items, categorySelection = []) =>
     set((state) => {
       const newColumn = {
         id,
@@ -46,12 +56,16 @@ export const useColumnStore = create<ColumnsStore>((set) => ({
             category: categories[item.category],
           }))
         : createColumnItems();
+      const columnItemsOrdered = orderByDistance(
+        columnItems,
+        categorySelection
+      );
 
       return {
         columns: [...state.columns, newColumn],
         items: {
           ...state.items,
-          [newColumn.id]: columnItems,
+          [newColumn.id]: columnItemsOrdered,
         },
       };
     }),
