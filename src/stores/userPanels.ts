@@ -5,7 +5,6 @@ import {
   CategorySelection,
   defaultAge,
 } from "src/stores/model";
-import { random } from "lodash";
 
 export type ControlElement = {
   [key: string]: any;

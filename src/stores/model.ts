@@ -165,7 +165,7 @@ export const orderByDistance = (
     const dist = distance(selectionValues, itemValues);
     return { ...item, dist };
   });
-  console.warn(orderedData);
+
   const orderedCategoties = orderBy(
     orderedData,
     ["dist", "age"],
