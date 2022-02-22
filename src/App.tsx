@@ -28,6 +28,7 @@ import { Slider } from "./components/Slider/Slider";
 import itemList from "./items-list.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/pro-regular-svg-icons";
+import awLogo from "src/assets/aw-logo.svg";
 
 type Mode = "static" | "procedural";
 const staticItemsList = itemList as ColumnItemExported[];
@@ -264,43 +265,53 @@ function App() {
       </div>
 
       {/* Footer */}
-      <div className="flex items-center justify-center py-6 px-6 space-x-2 text-xs text-gray-500">
-        <div>Modus:</div>
-        <div className="flex space-x-2">
-          <button
-            type="button"
-            className={
-              mode === "static"
-                ? "text-gray-400 cursor-auto"
-                : "hover:underline"
-            }
-            disabled={mode === "static"}
-            onClick={() => switchMode("static")}
-            title="Verwende in jeder Spalte ein und dieselbe Liste"
-          >
-            Statisch
-            {mode === "static" && (
-              <FontAwesomeIcon className="ml-0.5" icon={faCheck} />
-            )}
-          </button>
-          <div>/</div>
-          <button
-            type="button"
-            className={
-              mode === "procedural"
-                ? "text-gray-400 cursor-auto"
-                : "hover:underline"
-            }
-            disabled={mode === "procedural"}
-            onClick={() => switchMode("procedural")}
-            title="Verwende in jeder Spalte zufällig generierte Listen"
-          >
-            Prozedural
-            {mode === "procedural" && (
-              <FontAwesomeIcon className="ml-0.5" icon={faCheck} />
-            )}
-          </button>
+      <div className="flex flex-col items-center justify-center py-6 px-6">
+        <div className="flex items-center justify-center py-6 px-6 space-x-2 text-xs text-gray-500">
+          <div>Modus:</div>
+          <div className="flex space-x-2">
+            <button
+              type="button"
+              className={
+                mode === "static"
+                  ? "text-gray-400 cursor-auto"
+                  : "hover:underline"
+              }
+              disabled={mode === "static"}
+              onClick={() => switchMode("static")}
+              title="Verwende in jeder Spalte ein und dieselbe Liste"
+            >
+              Statisch
+              {mode === "static" && (
+                <FontAwesomeIcon className="ml-0.5" icon={faCheck} />
+              )}
+            </button>
+            <div>/</div>
+            <button
+              type="button"
+              className={
+                mode === "procedural"
+                  ? "text-gray-400 cursor-auto"
+                  : "hover:underline"
+              }
+              disabled={mode === "procedural"}
+              onClick={() => switchMode("procedural")}
+              title="Verwende in jeder Spalte zufällig generierte Listen"
+            >
+              Prozedural
+              {mode === "procedural" && (
+                <FontAwesomeIcon className="ml-0.5" icon={faCheck} />
+              )}
+            </button>
+          </div>
         </div>
+
+        <a
+          href="https://algorithmwatch.org"
+          rel="nofollow noopener"
+          target="blank"
+        >
+          <img src={awLogo} alt="" className="h-10" />
+        </a>
       </div>
     </div>
   );
