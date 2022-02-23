@@ -23,6 +23,8 @@ type PlatformPanelStore = {
   isVisible: boolean;
   monetarisation: number;
   hasPublicSource: boolean;
+  sortByAge: boolean;
+  setSortByAge: (value: boolean) => void;
   setHasPublicSource: (value: boolean) => void;
   setMonetarisation: (value: number) => void;
   setIsVisible: (value: boolean) => void;
@@ -39,12 +41,13 @@ export const usePlatformPanelStore = create<PlatformPanelStore>((set) => ({
   isVisible: false,
   monetarisation: 0,
   hasPublicSource: false,
+  sortByAge: false,
 
-  setHasPublicSource: (value: boolean) =>
-    set((state) => ({ hasPublicSource: value })),
+  setSortByAge: (value) => set((state) => ({ sortByAge: value })),
 
-  setMonetarisation: (value: number) =>
-    set((state) => ({ monetarisation: value })),
+  setHasPublicSource: (value) => set((state) => ({ hasPublicSource: value })),
+
+  setMonetarisation: (value) => set((state) => ({ monetarisation: value })),
 
   setIsVisible: (value) => set((state) => ({ isVisible: value })),
   // panel: {}

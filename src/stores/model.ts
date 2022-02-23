@@ -117,7 +117,8 @@ export const orderByDistance = (
   monetarisation: number = 0,
   hasPublicSource?: boolean,
   ageSelection?: string,
-  hasAdSelection?: boolean
+  hasAdSelection?: boolean,
+  sortByAge?: boolean
 ) => {
   const age = ageSelection || defaultAge;
 
@@ -168,8 +169,7 @@ export const orderByDistance = (
 
   const orderedCategoties = orderBy(
     orderedData,
-    ["dist", "age"],
-    ["asc", "asc"]
+    sortByAge ? ["age"] : ["dist", "age"]
   ).map((item) => pick(item, Object.keys(items[0]))) as ColumnItem[];
 
   // orderedCategoties.sort((a, b) => (a.isVisible ? 0 : 1));

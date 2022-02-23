@@ -82,6 +82,8 @@ function App() {
   const hasPublicSource = usePlatformPanelStore(
     (state) => state.hasPublicSource
   );
+  const setSortByAge = usePlatformPanelStore((state) => state.setSortByAge);
+  const sortByAge = usePlatformPanelStore((state) => state.sortByAge);
   const columnRefs: MutableRefObject<{ [key: string]: HTMLDivElement }> =
     useRef(
       columns.reduce((acc, cur) => ({ ...acc, [cur.id]: createRef() }), {})
@@ -90,17 +92,19 @@ function App() {
   const canAddColumn = columns.length < maxColumns;
   const onPlatformControlChange = (
     monetarisation: number,
-    hasPublicSource: boolean
+    hasPublicSource: boolean,
+    sortByAge: boolean
   ) => {
     const columnIds = columns.map((c) => c.id);
     columnIds.forEach((id, index) => {
-      onUserPanelControlChange(id, monetarisation, hasPublicSource);
+      onUserPanelControlChange(id, monetarisation, hasPublicSource, sortByAge);
     });
   };
   const onUserPanelControlChange = (
     columnId: string,
     monetarisation: number,
-    hasPublicSource: boolean
+    hasPublicSource: boolean,
+    sortByAge: boolean
   ) => {
     const panel = userPanels.find((panel) => panel.columnId === columnId);
     const allCategories = panel?.controlGroups.categories.controls.map(
@@ -134,7 +138,8 @@ function App() {
       moni,
       hasPublicSource,
       ageSelection?.key,
-      hasAdSelection?.value
+      hasAdSelection?.value,
+      sortByAge
     );
 
     setColumnItems(columnId, newItems as ColumnItem[]);
@@ -181,7 +186,7 @@ function App() {
                 maxValue={10}
                 onChange={(value: number) => {
                   setMonetarsation(value);
-                  onPlatformControlChange(value, hasPublicSource);
+                  onPlatformControlChange(value, hasPublicSource, sortByAge);
                 }}
               />
             </div>
@@ -199,9 +204,36 @@ function App() {
                 onColor="#16a34a"
                 onChange={() => {
                   setHasPublicSource(!hasPublicSource);
-                  onPlatformControlChange(monetarisation, !hasPublicSource);
+                  onPlatformControlChange(
+                    monetarisation,
+                    !hasPublicSource,
+                    sortByAge
+                  );
                 }}
                 checked={hasPublicSource}
+              />
+            </div>
+          </div>
+          <div>
+            <div className="font-bold mb-2">Nach Aktualität sortieren</div>
+            <div className="h-8">
+              <Switch
+                offColor="#666"
+                height={24}
+                width={48}
+                handleDiameter={20}
+                uncheckedIcon={false}
+                checkedIcon={false}
+                onColor="#16a34a"
+                onChange={() => {
+                  setSortByAge(!sortByAge);
+                  onPlatformControlChange(
+                    monetarisation,
+                    hasPublicSource,
+                    !sortByAge
+                  );
+                }}
+                checked={sortByAge}
               />
             </div>
           </div>
@@ -236,7 +268,8 @@ function App() {
                       onUserPanelControlChange(
                         columnId,
                         monetarisation,
-                        hasPublicSource
+                        hasPublicSource,
+                        sortByAge
                       );
                     }, 0);
                   }}
