@@ -28,7 +28,7 @@ import { Slider } from "./components/Slider/Slider";
 import itemList from "./items-list.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/pro-regular-svg-icons";
-import awLogo from "src/assets/aw-logo.svg";
+import dataskopLogo from "src/assets/dataskop-logo.svg";
 
 type Mode = "static" | "procedural";
 const staticItemsList = itemList as ColumnItemExported[];
@@ -305,12 +305,8 @@ function App() {
           </div>
         </div>
 
-        <a
-          href="https://algorithmwatch.org"
-          rel="nofollow noopener"
-          target="blank"
-        >
-          <img src={awLogo} alt="" className="h-10" />
+        <a href="https://dataskop.net" rel="nofollow noopener" target="blank">
+          <img src={dataskopLogo} alt="" className="h-8" />
         </a>
       </div>
     </div>
