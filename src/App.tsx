@@ -185,6 +185,9 @@ function App() {
                 minValue={0}
                 maxValue={10}
                 onChange={(value: number) => {
+                  if (value > 0 && sortByAge) {
+                    setSortByAge(false);
+                  }
                   setMonetarsation(value);
                   onPlatformControlChange(value, hasPublicSource, sortByAge);
                 }}
@@ -226,6 +229,9 @@ function App() {
                 checkedIcon={false}
                 onColor="#16a34a"
                 onChange={() => {
+                  if (!sortByAge && monetarisation > 0) {
+                    setMonetarsation(0);
+                  }
                   setSortByAge(!sortByAge);
                   onPlatformControlChange(
                     monetarisation,
