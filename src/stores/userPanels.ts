@@ -5,6 +5,7 @@ import {
   CategorySelection,
   defaultAge,
 } from "src/stores/model";
+import { getTranslation } from "src/utils";
 
 export type ControlElement = {
   [key: string]: any;
@@ -58,7 +59,7 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
         columnId,
         controlGroups: {
           categories: {
-            label: "Kategorien",
+            label: getTranslation("categories"),
             controls: categories.map(({ label, bgColor }) => ({
               key: label,
               type: "slider",
@@ -72,7 +73,7 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
             })),
           },
           age: {
-            label: "Aktualität",
+            label: getTranslation("topicality"),
             controls: Object.keys(ageTypes).map((key) => ({
               key,
               label: ageTypes[key].label,
@@ -80,11 +81,11 @@ export const useUserPanelStore = create<UserPanelsStore>((set) => ({
             })),
           },
           hasAd: {
-            label: "Werbung vermeiden",
+            label: getTranslation("avoidAds"),
             controls: [
               {
                 key: "advertisment",
-                label: "Werbung vermeiden",
+                label: getTranslation("avoidAds"),
                 value: false,
               },
             ],

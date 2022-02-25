@@ -9,27 +9,28 @@ import {
 } from "@fortawesome/pro-solid-svg-icons";
 import { distance } from "mathjs";
 import { ColumnItem } from "src/stores";
+import { getTranslation } from "src/utils";
 
 export const defaultAge = "month";
 export type AgeType = { label: any; itemsCount: Function; value: number };
 export const ageTypes: { [key: string]: AgeType } = {
   today: {
-    label: "Heute",
+    label: getTranslation("today"),
     itemsCount: () => random(1, 5),
     value: 1,
   },
   week: {
-    label: "Diese Woche",
+    label: getTranslation("thisWeek"),
     itemsCount: () => random(10, 16),
     value: 7,
   },
   month: {
-    label: "Diesen Monat",
+    label: getTranslation("thisMonth"),
     itemsCount: () => random(18, 30),
     value: 31,
   },
   year: {
-    label: "Dieses Jahr",
+    label: getTranslation("thisYear"),
     itemsCount: () => random(40, 60),
     value: 365,
   },
@@ -43,27 +44,27 @@ export type Category = {
 
 export const categories: Category[] = [
   {
-    label: "Film & Animation",
+    label: getTranslation("filmAnimation"),
     bgColor: "bg-blue-800",
     icon: faCameraMovie,
   },
   {
-    label: "Gaming",
+    label: getTranslation("gaming"),
     bgColor: "bg-red-800",
     icon: faGamepadAlt,
   },
   {
-    label: "Musik, Tiere, Sport",
+    label: getTranslation("petsAnimals"),
     bgColor: "bg-green-900",
     icon: faMusic,
   },
   {
-    label: "Menschen & Blogs",
+    label: getTranslation("peopleBlogs"),
     bgColor: "bg-yellow-800",
     icon: faUserFriends,
   },
   {
-    label: "Nachrichten & Politik",
+    label: getTranslation("newsPolitics"),
     bgColor: "bg-gray-600",
     icon: faNewspaper,
   },

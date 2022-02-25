@@ -1,0 +1,28 @@
+{
+  "monetarization": ["Monetarisierung", "Monetarization"],
+  "verifiedSources": ["Verifizierte Quellen", "Verified sources"],
+  "sortByAge": ["Nach Aktualität sortieren", "Sort by actuality"],
+  "mode": ["Modus", "Mode"],
+  "static": ["Statisch", "Static"],
+  "procedural": ["Prozedural", "Procedural"],
+  "staticModeExplanation": [
+    "Verwende in jeder Spalte ein und dieselbe Liste",
+    "Use one and the same list in each column"
+  ],
+  "proceduralModeExplanation": [
+    "Verwende in jeder Spalte zufällig generierte Listen",
+    "Use randomly generated lists in each column"
+  ],
+  "filmAnimation": ["Film & Animation", "Film & Animation"],
+  "gaming": ["Gaming", "Gaming"],
+  "petsAnimals": ["Musik, Tiere, Sport", "Pets & Animals"],
+  "peopleBlogs": ["Menschen & Blogs", "People & Blogs"],
+  "newsPolitics": ["Nachrichten & Politik", "News & Politics"],
+  "today": ["Heute", "Today"],
+  "thisWeek": ["Diese Woche", "This week"],
+  "thisMonth": ["Diesen Monat", "This month"],
+  "thisYear": ["Dieses Jahr", "This year"],
+  "categories": ["Kategorien", "Categories"],
+  "topicality": ["Aktualität", "Topicality"],
+  "avoidAds": ["Werbung vermeiden", "Avoid ads"]
+}

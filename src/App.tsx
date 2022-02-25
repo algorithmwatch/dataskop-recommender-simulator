@@ -29,6 +29,7 @@ import itemList from "./items-list.json";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheck } from "@fortawesome/pro-regular-svg-icons";
 import dataskopLogo from "src/assets/dataskop-logo.svg";
+import { getTranslation } from "./utils";
 
 type Mode = "static" | "procedural";
 const staticItemsList = itemList as ColumnItemExported[];
@@ -175,7 +176,9 @@ function App() {
           </svg>
 
           <div>
-            <div className="font-bold mb-2">Monetarisierung</div>
+            <div className="font-bold mb-2">
+              {getTranslation("monetarization")}
+            </div>
             <div className="h-8">
               <Slider
                 label="test"
@@ -195,7 +198,9 @@ function App() {
             </div>
           </div>
           <div>
-            <div className="font-bold mb-2">Verifizierte Quellen</div>
+            <div className="font-bold mb-2">
+              {getTranslation("verifiedSources")}
+            </div>
             <div className="h-8">
               <Switch
                 offColor="#666"
@@ -218,7 +223,7 @@ function App() {
             </div>
           </div>
           <div>
-            <div className="font-bold mb-2">Nach Aktualität sortieren</div>
+            <div className="font-bold mb-2">{getTranslation("sortByAge")}</div>
             <div className="h-8">
               <Switch
                 offColor="#666"
@@ -306,7 +311,7 @@ function App() {
       {/* Footer */}
       <div className="flex flex-col items-center justify-center py-6 px-6">
         <div className="flex items-center justify-center py-6 px-6 space-x-2 text-xs text-gray-500">
-          <div>Modus:</div>
+          <div>{getTranslation("mode")}:</div>
           <div className="flex space-x-2">
             <button
               type="button"
@@ -317,9 +322,9 @@ function App() {
               }
               disabled={mode === "static"}
               onClick={() => switchMode("static")}
-              title="Verwende in jeder Spalte ein und dieselbe Liste"
+              title={getTranslation("staticModeExplanation")}
             >
-              Statisch
+              {getTranslation("static")}
               {mode === "static" && (
                 <FontAwesomeIcon className="ml-0.5" icon={faCheck} />
               )}
@@ -334,9 +339,9 @@ function App() {
               }
               disabled={mode === "procedural"}
               onClick={() => switchMode("procedural")}
-              title="Verwende in jeder Spalte zufällig generierte Listen"
+              title={getTranslation("proceduralModeExplanation")}
             >
-              Prozedural
+              {getTranslation("procedural")}
               {mode === "procedural" && (
                 <FontAwesomeIcon className="ml-0.5" icon={faCheck} />
               )}
