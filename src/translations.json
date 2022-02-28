@@ -24,5 +24,6 @@
   "thisYear": ["Dieses Jahr", "This year"],
   "categories": ["Kategorien", "Categories"],
   "topicality": ["Aktualität", "Topicality"],
-  "avoidAds": ["Werbung vermeiden", "Avoid ads"]
+  "avoidAds": ["Werbung vermeiden", "Avoid ads"],
+  "controlPlatform": ["Plattform steuern", "Control platform"]
 }

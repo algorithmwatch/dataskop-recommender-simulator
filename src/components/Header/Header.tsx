@@ -3,6 +3,7 @@ import { Button } from "src/components/Button";
 import { usePlatformPanelStore } from "src/stores/platformPanel";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faQuestionCircle } from "@fortawesome/pro-regular-svg-icons";
+import { getTranslation } from "src/utils";
 
 export function Header({
   addColumn,
@@ -36,7 +37,7 @@ export function Header({
           theme={platformIsVisible ? "outlineActive" : "outline"}
           onClick={() => setPlatformIsVisible(!platformIsVisible)}
         >
-          Plattform steuern
+          {getTranslation("controlPlatform")}
         </Button>
       </div>
     </header>
