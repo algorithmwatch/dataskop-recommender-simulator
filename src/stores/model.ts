@@ -145,7 +145,10 @@ export const orderByDistance = (
   let adFactor = 0.005;
 
   const monValue = [0];
-  monValue.push(Math.pow(adFactor, -Math.abs(monetarisation / 10)));
+
+  const powVal =
+    monetarisation > 0 ? Math.pow(adFactor, -Math.abs(monetarisation / 10)) : 0;
+  monValue.push(powVal);
 
   const selectionValues = catSelectionValues.concat(monValue);
   // weightVector(catSelectionKeys, keys, catSelectionValues, selection);
@@ -159,7 +162,7 @@ export const orderByDistance = (
     catValues[catIndex] = 1;
 
     const monValue2 = [item.baseRank];
-    monValue2.push(item.hasAd ? 1 * adFactor : 0);
+    monValue2.push(item.hasAd && monetarisation > 0 ? 1 * adFactor : 0);
 
     const itemValues = catValues.concat(monValue2);
     // weightVector(selectionKeys, keys, subset, selection);
