@@ -1,46 +1,19 @@
-# Getting Started with Create React App
+# `platform-simulator`
+
+Many online platforms – e.g., video portals, e-commerce, social networks – use recommendation algorithms to recommend products – e.g., videos, articles for sale, or news – to their users as accurately as possible. Such recommendations are based on various principles. For example, what can be recommended is what many other users with similar interests also like or what is similar to the previous products of the respective user. However, products for which a provider pays particularly high advertising prices can also be recommended.
+
+The simulator „Plattformdynamiken“ simulates the recommendation system of a video portal. By changing various parameters, the principles implemented in the simulator can be explored. The perspective of the users with their respective content interests is included as well as the perspective of the platform operators, who pursue financial interests, among other things.
+
+Recommendation algorithms are usually black boxes, which means that their exact function is not disclosed. For example, it remains intransparent to what extent the users‘ behavior influences the recommendations or on which assumptions the recommendation algorithms are based – e.g., those that can also lead to the reinforcement of biases. Even an analysis of user behavior or user data cannot (fully) clarify these questions.
+
+Using the simulator allows the discovery of features that give rise to discussion and comparison with existing platforms. However, it also contains some ambiguities and aspects that are difficult to understand and illustrate the challenges in comprehending recommendation algorithms. The simulator is particularly suitable for media education at school as well as for general media education. The „Plattformdynamiken“ application was created as part of the DataSkop project.
+
+https://dataskop.net/pilotprojekt-wahlempfehlung-was-zeigt-dir-der-youtube-algorithmus-zur-bundestagswahl-juli-2021/recommender-sim-info/
+
+## Development
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## License
 
-In the project directory, you can run:
-
-### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+MIT
